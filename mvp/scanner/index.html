@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101820">
+  <meta name="description" content="AI Parts Scanner — Quét phụ tùng & Tra giá Taobao/1688, tính giá niêm yết +30% cho gara.">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <title>AI Parts Scanner & Smart Pricing — Find And Fix</title>
+  <link rel="stylesheet" href="./scanner.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a href="../" class="back-link" title="Quay lại trang chủ">←</a>
+      <div class="brand-mark" aria-hidden="true">FF<span>✦</span></div>
+      <div class="brand-title"><strong>AI Parts Scanner</strong><small>QUÉT PHỤ TÙNG & TRA GIÁ</small></div>
+      <button class="icon-button" id="open-settings-btn" aria-label="Cài đặt tỷ giá" title="Cài đặt tỷ giá">⚙</button>
+      <button class="icon-button" id="open-quote-top-btn" aria-label="Xem báo giá" title="Xem báo giá">🧾</button>
+    </header>
+
+    <main id="main-content">
+      <!-- Step Navigation Bar -->
+      <div class="scanner-stepper">
+        <div class="step-node active" id="step-node-1" data-step="1"><span>1</span><small>Chụp ảnh</small></div>
+        <div class="step-divider"></div>
+        <div class="step-node" id="step-node-2" data-step="2"><span>2</span><small>Cắt & Lọc</small></div>
+        <div class="step-divider"></div>
+        <div class="step-node" id="step-node-3" data-step="3"><span>3</span><small>Linh kiện</small></div>
+        <div class="step-divider"></div>
+        <div class="step-node" id="step-node-4" data-step="4"><span>4</span><small>Tra giá sàn</small></div>
+      </div>
+
+      <!-- STAGE 1: CAMERA VIEWFINDER & CAPTURE -->
+      <div class="scanner-stage active" id="stage-camera">
+        <div class="camera-container">
+          <video id="scanner-video" playsinline autoplay muted></video>
+          
+          <!-- Viewfinder Overlay & Framing Corners -->
+          <div class="viewfinder-overlay">
+            <div class="reticle-box">
+              <span class="corner tl"></span>
+              <span class="corner tr"></span>
+              <span class="corner bl"></span>
+              <span class="corner br"></span>
+              <div class="target-crosshair"></div>
+            </div>
+          </div>
+
+          <!-- Top Camera Controls -->
+          <div class="camera-top-bar">
+            <button class="cam-btn" id="btn-toggle-torch" type="button" aria-label="Bật đèn flash" title="Bật/Tắt Flash">
+              <span id="torch-icon">⚡</span>
+            </button>
+            <div class="blur-status-pill" id="blur-pill">
+              <span class="blur-dot"></span>
+              <span id="blur-status-text">Đang đo độ nét...</span>
+            </div>
+            <button class="cam-btn" id="btn-flip-camera" type="button" aria-label="Đổi camera" title="Đổi camera trước/sau">
+              <span>🔄</span>
+            </button>
+          </div>
+
+          <!-- Fallback notification -->
+          <div class="camera-fallback-msg" id="camera-fallback-msg" style="display:none;">
+            <p>Camera không khả dụng hoặc chưa cấp quyền. Hãy chọn ảnh từ máy bên dưới.</p>
+          </div>
+        </div>
+
+        <!-- Bottom Camera Bar (Thumb-friendly ergonomics) -->
+        <div class="camera-bottom-bar">
+          <label class="cam-circle-btn" title="Chọn ảnh từ máy">
+            <input type="file" id="scanner-file-input" accept="image/*" capture="environment">
+            <span>🖼️</span>
+            <small>Thư viện</small>
+          </label>
+
+          <button type="button" id="btn-shutter" class="shutter-trigger" aria-label="Chụp ảnh phụ tùng">
+            <span class="shutter-ring"><span class="shutter-dot"></span></span>
+          </button>
+
+          <button type="button" id="btn-sample-photo-trigger" class="cam-circle-btn" title="Ảnh mẫu thử nghiệm">
+            <span>🔬</span>
+            <small>Ảnh mẫu</small>
+          </button>
+        </div>
+
+        <!-- Vehicle Scoped Card -->
+        <div class="vehicle-scope-pill" id="vehicle-scope-pill">
+          <span>🚗 Xe đang sửa: <b id="scanner-vehicle-label">Toyota Vios 2019 (1.5L)</b></span>
+          <a href="../" class="text-link">Đổi xe</a>
+        </div>
+
+        <div class="scanner-tips">
+          <p>💡 Đặt linh kiện hoặc tem mã OEM vào giữa khung ngắm. Giữ chắc tay để tránh ảnh mờ.</p>
+        </div>
+      </div>
+
+      <!-- STAGE 2: PHOTO REVIEW, ROTATE & CROP -->
+      <div class="scanner-stage" id="stage-crop">
+        <div class="crop-header">
+          <div>
+            <span class="eyebrow dark">KIỂM TRA & CẮT ẢNH</span>
+            <h2>Xem lại ảnh chụp</h2>
+          </div>
+          <div class="crop-actions">
+            <button class="btn-tool" id="btn-rotate-photo" title="Xoay 90 độ">↺ Xoay</button>
+            <button class="btn-tool" id="btn-reset-crop" title="Khôi phục">Đặt lại</button>
+          </div>
+        </div>
+
+        <div class="crop-workspace">
+          <canvas id="crop-canvas"></canvas>
+          <div class="crop-bounding-guide" id="crop-guide">
+            <span class="guide-corner tl"></span><span class="guide-corner tr"></span>
+            <span class="guide-corner bl"></span><span class="guide-corner br"></span>
+          </div>
+        </div>
+
+        <div class="blur-assessment-card" id="blur-assessment-card">
+          <div class="blur-gauge">
+            <div class="blur-fill" id="blur-gauge-fill" style="width: 88%;"></div>
+          </div>
+          <div class="blur-labels">
+            <span id="blur-score-text">Độ sắc nét: 88/100 (Đạt yêu cầu)</span>
+            <span id="blur-advice-text">Ảnh đủ sắc nét để AI đọc tem nhãn và mã OEM</span>
+          </div>
+        </div>
+
+        <div class="crop-nav-buttons">
+          <button class="secondary-button" id="btn-retake-photo">← Chụp lại</button>
+          <button class="primary-button" id="btn-confirm-crop">Phân tích AI linh kiện <span>→</span></button>
+        </div>
+      </div>
+
+      <!-- STAGE 3: PART IDENTIFICATION & OBJECT SELECTION -->
+      <div class="scanner-stage" id="stage-parts">
+        <div class="page-intro compact">
+          <span class="eyebrow dark">KẾT QUẢ NHẬN DIỆN AI</span>
+          <h2>Chọn linh kiện cần tra giá</h2>
+          <p>AI đã phân tích các đối tượng trong ảnh. Chạm vào linh kiện để xem thông số và tra giá Taobao/1688.</p>
+        </div>
+
+        <!-- Overlaid Image with Clickable Bounding Boxes -->
+        <div class="interactive-preview-box">
+          <div class="preview-img-wrapper" id="preview-img-wrapper">
+            <img id="detected-photo-preview" alt="Ảnh chụp linh kiện">
+            <div class="bbox-layer" id="bbox-layer"></div>
+          </div>
+          <div class="bbox-hint">
+            <span>Chạm vào vùng có viền màu trên ảnh để đổi linh kiện</span>
+            <button class="text-link" id="btn-toggle-manual-selector">Vẽ vùng thủ công ✏</button>
+          </div>
+        </div>
+
+        <!-- Active Part Details Card -->
+        <div class="part-active-card" id="part-active-card">
+          <div class="part-header-row">
+            <span class="part-category-tag" id="active-part-category">Hệ thống gạt nước</span>
+            <span class="confidence-badge" id="active-part-confidence">Độ tin cậy: Cao (94%)</span>
+          </div>
+
+          <div class="field-group">
+            <label>Tên phụ tùng (Tiếng Việt)
+              <input type="text" id="active-part-name-vi" value="Lưỡi gạt mưa trước (Bên lái / Bên phụ)">
+            </label>
+          </div>
+
+          <div class="two-cols">
+            <div class="meta-field">
+              <small>Tên tiếng Anh:</small>
+              <strong id="active-part-name-en">Front Windshield Wiper Blade</strong>
+            </div>
+            <div class="meta-field">
+              <small>Tiếng Trung (Search sàn):</small>
+              <strong id="active-part-name-zh" class="highlight-zh">汽车无骨雨刷片</strong>
+            </div>
+          </div>
+
+          <div class="two-cols">
+            <div class="field-group">
+              <label>Mã OEM / Part No (OCR)
+                <input type="text" id="active-part-oem" value="85212-0D080" placeholder="Ví dụ: 85212-0D080">
+              </label>
+            </div>
+            <div class="field-group">
+              <label>Hãng phụ tùng
+                <input type="text" id="active-part-brand" value="Bosch / Denso" placeholder="OEM, Denso...">
+              </label>
+            </div>
+          </div>
+
+          <!-- Vehicle Fitment Check -->
+          <div class="compatibility-box" id="active-compatibility-box">
+            <div class="compat-status-badge verified" id="compat-badge">
+              <span class="compat-icon">✓</span>
+              <div class="compat-text">
+                <strong id="compat-status-title">ĐÃ XÁC MINH TƯƠNG THÍCH</strong>
+                <small id="compat-status-desc">Khớp mã OEM với Toyota Vios 2019 (1.5L)</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Search Trigger Action -->
+          <button class="primary-button highlight-search-btn" id="btn-start-search-parts">
+            <span>Tìm giá Taobao & 1688</span>
+            <span>🔍</span>
+          </button>
+        </div>
+
+        <!-- Other Detected Objects Carousel/List -->
+        <div class="section-heading compact">
+          <div><span class="eyebrow dark">ĐỐI TƯỢNG PHÁT HIỆN KHÁC</span><h3>Linh kiện cùng khu vực</h3></div>
+        </div>
+        <div class="other-parts-list" id="other-parts-list"></div>
+      </div>
+
+      <!-- STAGE 4: SEARCH RESULTS & PRICE COMPARISON -->
+      <div class="scanner-stage" id="stage-results">
+        <div class="results-topbar">
+          <div>
+            <span class="eyebrow dark">NGUỒN HÀNG TRUNG QUỐC</span>
+            <h2>Kết quả Taobao & 1688</h2>
+          </div>
+          <button class="secondary-sm-btn" id="btn-back-to-parts">← Chọn lại</button>
+        </div>
+
+        <!-- Exchange Rate & Demo Warning Bar -->
+        <div class="exchange-rate-banner">
+          <span class="rate-badge">¥ ➜ ₫</span>
+          <div class="rate-details">
+            <strong id="results-rate-text">1 CNY = 3.680 VND</strong>
+            <small id="results-rate-source">Nguồn: Vietcombank · Cập nhật hôm nay</small>
+          </div>
+          <button class="text-link" id="btn-change-rate-results">Đổi</button>
+        </div>
+
+        <div class="demo-notice-pill" id="demo-notice-pill">
+          <span class="demo-tag">DEMO</span>
+          <span>Dữ liệu mẫu thử nghiệm theo đặc tả (Chưa cấu hình API Key thương mại)</span>
+        </div>
+
+        <!-- Filter Pills -->
+        <div class="filter-row" role="group" aria-label="Bộ lọc kết quả">
+          <button class="filter active" data-res-filter="all">Tất cả</button>
+          <button class="filter" data-res-filter="1688">Xưởng 1688 (Sỉ)</button>
+          <button class="filter" data-res-filter="taobao">Taobao (Lẻ)</button>
+          <button class="filter" data-res-filter="oem">Hàng OEM</button>
+          <button class="filter" data-res-filter="lowest-price">Giá thấp nhất</button>
+        </div>
+
+        <!-- Results Cards List -->
+        <div id="product-results-container" class="product-cards-grid"></div>
+
+        <!-- Manual Link Insertion & Anti-SSRF URL Verification -->
+        <div class="manual-url-box">
+          <div class="section-heading compact">
+            <div><span class="eyebrow dark">TÌM KIẾM THỦ CÔNG & DÁN LINK</span><h3>Kiểm tra link trực tiếp</h3></div>
+          </div>
+          <div class="external-search-links">
+            <a href="#" id="link-open-taobao" target="_blank" rel="noopener" class="ext-btn taobao">
+              Mở tìm kiếm trên <b>Taobao.com ↗</b>
+            </a>
+            <a href="#" id="link-open-1688" target="_blank" rel="noopener" class="ext-btn alibaba1688">
+              Mở tìm kiếm trên <b>1688.com ↗</b>
+            </a>
+          </div>
+          <div class="url-input-form">
+            <label>Dán liên kết sản phẩm Taobao / 1688 để lấy giá:</label>
+            <div class="url-field-row">
+              <input type="url" id="manual-product-url" placeholder="https://detail.1688.com/offer/..." autocomplete="off">
+              <button type="button" id="btn-verify-manual-url" class="accent-btn">Xác minh</button>
+            </div>
+            <small class="security-note">🛡️ Đã bật bảo mật Anti-SSRF: Chỉ chấp nhận tên miền chính thức của Taobao, Tmall và 1688.</small>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- DIALOG 1: SMART PRICING ENGINE BOTTOM SHEET -->
+  <dialog id="pricing-dialog" class="sheet">
+    <div class="sheet-head">
+      <div>
+        <span class="eyebrow dark">SMART PRICING ENGINE</span>
+        <h2 id="pricing-title">Tính giá niêm yết Gara</h2>
+      </div>
+      <button class="close-button" type="button" data-close>×</button>
+    </div>
+    
+    <div class="pricing-container" id="pricing-content">
+      <!-- Injected dynamically -->
+    </div>
+  </dialog>
+
+  <!-- DIALOG 2: CUSTOMER QUOTATION DRAWER -->
+  <dialog id="quotation-dialog" class="sheet wide">
+    <div class="sheet-head">
+      <div>
+        <span class="eyebrow dark">BẢN BÁO GIÁ GARA</span>
+        <h2>Báo giá gửi khách hàng</h2>
+      </div>
+      <button class="close-button" type="button" data-close>×</button>
+    </div>
+
+    <!-- Toggle Customer Mode vs Internal Garage Mode -->
+    <div class="quote-mode-toggle-bar">
+      <span class="mode-label">Chế độ hiển thị:</span>
+      <div class="toggle-switch-wrapper">
+        <button type="button" class="mode-btn active" id="btn-mode-customer">👁 Khách hàng xem</button>
+        <button type="button" class="mode-btn" id="btn-mode-internal">🔒 Quản lý nội bộ</button>
+      </div>
+    </div>
+    <div class="security-privacy-notice" id="quote-security-notice">
+      🔒 Chế độ khách hàng: <b>Đã ẩn hoàn toàn</b> giá nhập sàn (CNY), tên sàn Taobao/1688, phí mua hộ và % lãi.
+    </div>
+
+    <div class="quotation-content" id="quotation-content">
+      <!-- Injected dynamically -->
+    </div>
+  </dialog>
+
+  <!-- DIALOG 3: SETTINGS & EXCHANGE RATE CONFIG -->
+  <dialog id="settings-dialog" class="sheet">
+    <div class="sheet-head">
+      <div>
+        <span class="eyebrow dark">CẤU HÌNH GARA</span>
+        <h2>Cài đặt Tỷ giá & Markup</h2>
+      </div>
+      <button class="close-button" type="button" data-close>×</button>
+    </div>
+    
+    <form id="settings-form" class="settings-form">
+      <div class="field-group">
+        <label>Tỷ giá CNY / VND (1 Nhân dân tệ = ? VNĐ):
+          <input type="number" id="setting-cny-rate" min="3000" max="5000" step="1" required value="3680">
+        </label>
+      </div>
+      <div class="field-group">
+        <label>Nguồn tỷ giá:
+          <input type="text" id="setting-rate-source" value="Vietcombank (Hà Nội)">
+        </label>
+      </div>
+      <div class="field-group">
+        <label>Mức Markup mặc định (% cộng thêm khi tính giá bán):
+          <input type="number" id="setting-default-markup" min="0" max="100" step="1" value="30">
+        </label>
+        <small class="field-hint">Mặc định: 30%. Công thức: Giá bán = Giá vốn × (1 + 30/100).</small>
+      </div>
+      <div class="field-group">
+        <label>Cước vận chuyển TQ về VN (VND / kg):
+          <input type="number" id="setting-shipping-kg" min="10000" max="100000" step="1000" value="28000">
+        </label>
+      </div>
+      <div class="field-group">
+        <label>Phí dịch vụ mua hộ (%):
+          <input type="number" id="setting-procurement-fee" min="0" max="10" step="0.5" value="2">
+        </label>
+      </div>
+      <div class="field-group">
+        <label>Quy tắc làm tròn giá bán:
+          <select id="setting-rounding-rule">
+            <option value="1000" selected>Làm tròn đến 1.000 VND</option>
+            <option value="5000">Làm tròn đến 5.000 VND</option>
+            <option value="10000">Làm tròn đến 10.000 VND</option>
+            <option value="none">Không làm tròn (Giữ số lẻ)</option>
+          </select>
+        </label>
+      </div>
+      <button class="primary-button" type="submit">Lưu cấu hình <span>✓</span></button>
+    </form>
+  </dialog>
+
+  <script src="./scanner.js" defer></script>
+</body>
+</html>
