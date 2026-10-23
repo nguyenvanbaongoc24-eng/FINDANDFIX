@@ -7,6 +7,7 @@
   <meta name="description" content="Tra cứu tài liệu sửa chữa ô tô với dữ liệu mẫu hợp pháp.">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./acquisition.css">
   <title>Garage Atlas</title>
 </head>
 <body>
@@ -35,6 +36,7 @@
         <div class="section-head"><span class="eyebrow muted">ADMIN · DEMO</span><h1>Quản trị dữ liệu</h1><p>Chỉ mô phỏng workflow, không upload hay crawl nguồn ngoài.</p></div>
         <div class="admin-grid"><article class="card"><span class="stat">3</span><b>Tài liệu sample</b><small>Được phép phát hành</small></article><article class="card"><span class="stat">0</span><b>Nguồn crawl</b><small>Chưa có nguồn duyệt</small></article><article class="card"><span class="stat">0</span><b>Job đang chạy</b><small>Ingestion tắt</small></article></div>
         <article class="card admin-note"><h2>Kiểm soát quyền</h2><p>Chỉ admin có thể tạo nguồn, giấy phép và ingestion job sau khi Supabase được cấu hình. Crawler bị chặn nếu không có approval record.</p><button class="secondary" id="admin-demo">Xem checklist upload</button></article>
+        <section class="source-registry" aria-labelledby="source-registry-title"><div class="section-head compact"><span class="eyebrow muted">SOURCE REGISTRY</span><h2 id="source-registry-title">Nguồn dữ liệu</h2><p id="source-registry-status">Đang nạp registry…</p></div><div id="source-registry-list" class="results"></div></section>
       </section>
     </main>
     <nav class="bottom" aria-label="Điều hướng"><button class="active" data-nav="home"><span>⌂</span><small>Trang chủ</small></button><button data-nav="search"><span>⌕</span><small>Tra cứu</small></button><button data-nav="saved"><span>★</span><small>Đã lưu</small></button><button data-nav="admin"><span>▦</span><small>Quản trị</small></button></nav>
@@ -45,5 +47,6 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="./supabase-config.js" defer></script>
   <script src="./app.js" defer></script>
+  <script src="./acquisition-admin.js" defer></script>
 </body>
 </html>

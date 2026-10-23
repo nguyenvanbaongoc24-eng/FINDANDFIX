@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "id": "project-samples",
+      "name": "Garage Atlas project samples",
+      "base_url": null,
+      "status": "APPROVED",
+      "source_type": "admin_upload",
+      "storage_allowed": true,
+      "redistribution_allowed": true,
+      "crawl_enabled": false,
+      "license": "Project Sample License",
+      "notes": "Original test material created for this project only."
+    },
+    {
+      "id": "nhtsa-datasets-api",
+      "name": "NHTSA datasets and APIs",
+      "base_url": "https://www.nhtsa.gov/nhtsa-datasets-and-apis",
+      "status": "REVIEW_REQUIRED",
+      "source_type": "public_metadata",
+      "storage_allowed": false,
+      "redistribution_allowed": false,
+      "crawl_enabled": false,
+      "terms_url": "https://api.nhtsa.gov/",
+      "robots_url": "https://www.nhtsa.gov/robots.txt",
+      "notes": "Use API metadata only after terms/robots review. Manufacturer-origin TSB PDFs require independent rights review."
+    },
+    {
+      "id": "carmin-reference",
+      "name": "Carmin Android reference",
+      "base_url": "https://play.google.com/store/apps/details?id=com.min.car",
+      "status": "RESTRICTED",
+      "source_type": "reference_application",
+      "storage_allowed": false,
+      "redistribution_allowed": false,
+      "crawl_enabled": false,
+      "notes": "Public listing is research-only. No APK or document ingestion without verified permission."
+    },
+    {
+      "id": "auto-repair-documents-reference",
+      "name": "Auto Repair Documents reference",
+      "base_url": "https://play.google.com/store/apps/details?id=vn.advn.automobile",
+      "status": "RESTRICTED",
+      "source_type": "reference_application",
+      "storage_allowed": false,
+      "redistribution_allowed": false,
+      "crawl_enabled": false,
+      "notes": "Public listing is research-only. Do not crawl or redistribute documents without written authorization."
+    },
+    {
+      "id": "licensed-oem-partner-template",
+      "name": "Licensed OEM / partner template",
+      "base_url": null,
+      "status": "REVIEW_REQUIRED",
+      "source_type": "partner",
+      "storage_allowed": false,
+      "redistribution_allowed": false,
+      "crawl_enabled": false,
+      "notes": "Create a source record only after receiving a written license and approved URL scope."
+    }
+  ]
+}

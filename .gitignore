@@ -9,6 +9,8 @@
 /__pycache__/
 /ANALYSIS.md
 /local_server.py
+/acquisition/state.sqlite3
+/acquisition/downloads/
 *.pyc
 
 # Local-only configuration and credentials
