@@ -190,8 +190,8 @@
       <div class="scanner-stage" id="stage-parts">
         <div class="page-intro compact">
           <span class="eyebrow dark">KẾT QUẢ NHẬN DIỆN AI</span>
-          <h2>Chọn linh kiện cần tra giá</h2>
-          <p>AI đã phân tích các đối tượng trong ảnh. Chạm vào linh kiện để xem thông số và tra giá Taobao/1688.</p>
+          <h2>Xác nhận vật thể trước khi tra giá</h2>
+          <p>Kết quả chỉ hiển thị thông tin có bằng chứng từ ảnh. Hãy sửa hoặc xác nhận trước khi tìm giá.</p>
         </div>
 
         <!-- Overlaid Image with Clickable Bounding Boxes -->
@@ -201,7 +201,7 @@
             <div class="bbox-layer" id="bbox-layer"></div>
           </div>
           <div class="bbox-hint">
-            <span>Chạm vào vùng có viền màu trên ảnh để đổi linh kiện</span>
+            <span>Khung chỉ xuất hiện khi dịch vụ Vision trả về tọa độ thực.</span>
             <button class="text-link" id="btn-toggle-manual-selector">
               <svg class="lucide lucide-edit-3" viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px;">
                 <path d="M12 20h9"/><path d="16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>
@@ -214,36 +214,36 @@
         <!-- Active Part Details Card -->
         <div class="part-active-card" id="part-active-card">
           <div class="part-header-row">
-            <span class="part-category-tag" id="active-part-category">Hệ thống gạt nước</span>
-            <span class="confidence-badge" id="active-part-confidence">Độ tin cậy: Cao (94%)</span>
+            <span class="part-category-tag" id="active-part-category">Chưa nhận diện</span>
+            <span class="confidence-badge" id="active-part-confidence">Chờ xác nhận</span>
           </div>
 
           <div class="field-group">
             <label>Tên phụ tùng (Tiếng Việt)
-              <input type="text" id="active-part-name-vi" value="Lưỡi gạt mưa trước (Bên lái / Bên phụ)">
+              <input type="text" id="active-part-name-vi" value="" placeholder="Tên vật thể theo ảnh">
             </label>
           </div>
 
           <div class="two-cols">
             <div class="meta-field">
               <small>Tên tiếng Anh:</small>
-              <strong id="active-part-name-en">Front Windshield Wiper Blade</strong>
+              <strong id="active-part-name-en">—</strong>
             </div>
             <div class="meta-field">
               <small>Tiếng Trung (Search sàn):</small>
-              <strong id="active-part-name-zh" class="highlight-zh">汽车无骨雨刷片</strong>
+              <strong id="active-part-name-zh" class="highlight-zh">—</strong>
             </div>
           </div>
 
           <div class="two-cols">
             <div class="field-group">
               <label>Mã OEM / Part No (OCR)
-                <input type="text" id="active-part-oem" value="85212-0D080" placeholder="Ví dụ: 85212-0D080">
+                <input type="text" id="active-part-oem" value="" placeholder="Chỉ nhập khi nhìn thấy hoặc đã xác minh">
               </label>
             </div>
             <div class="field-group">
               <label>Hãng phụ tùng
-                <input type="text" id="active-part-brand" value="Bosch / Denso" placeholder="OEM, Denso...">
+                <input type="text" id="active-part-brand" value="" placeholder="Hãng nhìn thấy trên ảnh">
               </label>
             </div>
           </div>
@@ -257,15 +257,15 @@
                 </svg>
               </span>
               <div class="compat-text">
-                <strong id="compat-status-title">ĐÃ XÁC MINH TƯƠNG THÍCH</strong>
-                <small id="compat-status-desc">Khớp mã OEM với Toyota Vios 2019 (1.5L)</small>
+                <strong id="compat-status-title">CHƯA KIỂM CHỨNG TƯƠNG THÍCH</strong>
+                <small id="compat-status-desc">Cần đối chiếu tài liệu hoặc nhà cung cấp trước khi lắp.</small>
               </div>
             </div>
           </div>
 
           <!-- Search Trigger Action -->
           <button class="primary-button highlight-search-btn" id="btn-start-search-parts">
-            <span>Tìm giá Taobao &amp; 1688</span>
+            <span>Đúng sản phẩm — Tra giá</span>
             <svg class="lucide lucide-search" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
             </svg>

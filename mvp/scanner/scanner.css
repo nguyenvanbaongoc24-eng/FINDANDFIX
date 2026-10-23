@@ -686,6 +686,11 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.recognition-state { margin: 14px 0; padding: 16px; border-radius: var(--radius-md); border: 1px solid #f0c46a; background: #fff9e8; color: var(--text-main); }
+.recognition-state strong { display: block; text-transform: capitalize; font-size: 13px; }
+.recognition-state p { margin: 6px 0 12px; font-size: 12px; line-height: 1.5; color: var(--text-muted); }
+.part-active-card[hidden], .recognition-state[hidden] { display: none; }
+
 @media print {
   body { background: #fff; }
   .topbar, .cam-btn, .camera-bottom-bar, .scanner-stepper, .btn-markup-30 { display: none !important; }
