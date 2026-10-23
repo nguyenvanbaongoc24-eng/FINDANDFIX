@@ -1,6 +1,10 @@
 # Automotive Repair Documents MVP
 
-MVP này độc lập với `../mobile-web/`. Chạy bằng local server của workspace và mở:
+MVP này độc lập với `../mobile-web/`. Từ root repository, chạy một HTTP server và mở:
+
+```powershell
+python -m http.server 4173
+```
 
 `http://localhost:4173/mvp/`
 
