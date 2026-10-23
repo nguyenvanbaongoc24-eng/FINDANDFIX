@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#101820">
+  <meta name="theme-color" content="#0F172A">
   <meta name="description" content="AI Parts Scanner — Quét phụ tùng & Tra giá Taobao/1688, tính giá niêm yết +30% cho gara.">
   <link rel="manifest" href="../manifest.webmanifest">
   <title>AI Parts Scanner & Smart Pricing — Find And Fix</title>
@@ -11,12 +11,28 @@
 </head>
 <body>
   <div class="app-shell">
+    <!-- Top Bar -->
     <header class="topbar">
-      <a href="../" class="back-link" title="Quay lại trang chủ">←</a>
+      <a href="../" class="back-link" title="Quay lại trang chủ" aria-label="Quay lại trang chủ">
+        <svg class="lucide lucide-arrow-left" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
+        </svg>
+      </a>
       <div class="brand-mark" aria-hidden="true">FF<span>✦</span></div>
-      <div class="brand-title"><strong>AI Parts Scanner</strong><small>QUÉT PHỤ TÙNG & TRA GIÁ</small></div>
-      <button class="icon-button" id="open-settings-btn" aria-label="Cài đặt tỷ giá" title="Cài đặt tỷ giá">⚙</button>
-      <button class="icon-button" id="open-quote-top-btn" aria-label="Xem báo giá" title="Xem báo giá">🧾</button>
+      <div class="brand-title">
+        <strong>AI Parts Scanner</strong>
+        <small>QUÉT PHỤ TÙNG &amp; TRA GIÁ SÀN</small>
+      </div>
+      <button class="icon-button" id="open-settings-btn" aria-label="Cài đặt tỷ giá" title="Cài đặt tỷ giá &amp; Markup">
+        <svg class="lucide lucide-settings" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>
+        </svg>
+      </button>
+      <button class="icon-button" id="open-quote-top-btn" aria-label="Xem báo giá gara" title="Xem báo giá gara">
+        <svg class="lucide lucide-receipt" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v.5"/><path d="M12 6v.5"/>
+        </svg>
+      </button>
     </header>
 
     <main id="main-content">
@@ -24,7 +40,7 @@
       <div class="scanner-stepper">
         <div class="step-node active" id="step-node-1" data-step="1"><span>1</span><small>Chụp ảnh</small></div>
         <div class="step-divider"></div>
-        <div class="step-node" id="step-node-2" data-step="2"><span>2</span><small>Cắt & Lọc</small></div>
+        <div class="step-node" id="step-node-2" data-step="2"><span>2</span><small>Cắt &amp; Lọc</small></div>
         <div class="step-divider"></div>
         <div class="step-node" id="step-node-3" data-step="3"><span>3</span><small>Linh kiện</small></div>
         <div class="step-divider"></div>
@@ -50,14 +66,20 @@
           <!-- Top Camera Controls -->
           <div class="camera-top-bar">
             <button class="cam-btn" id="btn-toggle-torch" type="button" aria-label="Bật đèn flash" title="Bật/Tắt Flash">
-              <span id="torch-icon">⚡</span>
+              <span id="torch-icon">
+                <svg class="lucide lucide-zap" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+              </span>
             </button>
             <div class="blur-status-pill" id="blur-pill">
               <span class="blur-dot"></span>
               <span id="blur-status-text">Đang đo độ nét...</span>
             </div>
             <button class="cam-btn" id="btn-flip-camera" type="button" aria-label="Đổi camera" title="Đổi camera trước/sau">
-              <span>🔄</span>
+              <svg class="lucide lucide-refresh-cw" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>
+              </svg>
             </button>
           </div>
 
@@ -71,7 +93,11 @@
         <div class="camera-bottom-bar">
           <label class="cam-circle-btn" title="Chọn ảnh từ máy">
             <input type="file" id="scanner-file-input" accept="image/*" capture="environment">
-            <span>🖼️</span>
+            <span class="icon-circle">
+              <svg class="lucide lucide-image" viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+              </svg>
+            </span>
             <small>Thư viện</small>
           </label>
 
@@ -80,19 +106,31 @@
           </button>
 
           <button type="button" id="btn-sample-photo-trigger" class="cam-circle-btn" title="Ảnh mẫu thử nghiệm">
-            <span>🔬</span>
+            <span class="icon-circle">
+              <svg class="lucide lucide-flask-conical" viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/>
+              </svg>
+            </span>
             <small>Ảnh mẫu</small>
           </button>
         </div>
 
         <!-- Vehicle Scoped Card -->
         <div class="vehicle-scope-pill" id="vehicle-scope-pill">
-          <span>🚗 Xe đang sửa: <b id="scanner-vehicle-label">Toyota Vios 2019 (1.5L)</b></span>
+          <span>
+            <svg class="lucide lucide-car" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;">
+              <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/>
+            </svg>
+            Xe đang sửa: <b id="scanner-vehicle-label">Toyota Vios 2019 (1.5L)</b>
+          </span>
           <a href="../" class="text-link">Đổi xe</a>
         </div>
 
         <div class="scanner-tips">
-          <p>💡 Đặt linh kiện hoặc tem mã OEM vào giữa khung ngắm. Giữ chắc tay để tránh ảnh mờ.</p>
+          <svg class="lucide lucide-lightbulb" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px;">
+            <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>
+          </svg>
+          <span>Đặt linh kiện hoặc tem mã OEM vào giữa khung ngắm. Giữ chắc tay để tránh ảnh mờ.</span>
         </div>
       </div>
 
@@ -100,11 +138,16 @@
       <div class="scanner-stage" id="stage-crop">
         <div class="crop-header">
           <div>
-            <span class="eyebrow dark">KIỂM TRA & CẮT ẢNH</span>
+            <span class="eyebrow dark">KIỂM TRA &amp; CẮT ẢNH</span>
             <h2>Xem lại ảnh chụp</h2>
           </div>
           <div class="crop-actions">
-            <button class="btn-tool" id="btn-rotate-photo" title="Xoay 90 độ">↺ Xoay</button>
+            <button class="btn-tool" id="btn-rotate-photo" title="Xoay 90 độ">
+              <svg class="lucide lucide-rotate-cw" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px;">
+                <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/>
+              </svg>
+              Xoay
+            </button>
             <button class="btn-tool" id="btn-reset-crop" title="Khôi phục">Đặt lại</button>
           </div>
         </div>
@@ -128,8 +171,18 @@
         </div>
 
         <div class="crop-nav-buttons">
-          <button class="secondary-button" id="btn-retake-photo">← Chụp lại</button>
-          <button class="primary-button" id="btn-confirm-crop">Phân tích AI linh kiện <span>→</span></button>
+          <button class="secondary-button" id="btn-retake-photo">
+            <svg class="lucide lucide-arrow-left" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;">
+              <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
+            </svg>
+            Chụp lại
+          </button>
+          <button class="primary-button" id="btn-confirm-crop">
+            <span>Phân tích AI linh kiện</span>
+            <svg class="lucide lucide-sparkles" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/>
+            </svg>
+          </button>
         </div>
       </div>
 
@@ -149,7 +202,12 @@
           </div>
           <div class="bbox-hint">
             <span>Chạm vào vùng có viền màu trên ảnh để đổi linh kiện</span>
-            <button class="text-link" id="btn-toggle-manual-selector">Vẽ vùng thủ công ✏</button>
+            <button class="text-link" id="btn-toggle-manual-selector">
+              <svg class="lucide lucide-edit-3" viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px;">
+                <path d="M12 20h9"/><path d="16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+              </svg>
+              Vẽ vùng thủ công
+            </button>
           </div>
         </div>
 
@@ -193,7 +251,11 @@
           <!-- Vehicle Fitment Check -->
           <div class="compatibility-box" id="active-compatibility-box">
             <div class="compat-status-badge verified" id="compat-badge">
-              <span class="compat-icon">✓</span>
+              <span class="compat-icon">
+                <svg class="lucide lucide-check" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </span>
               <div class="compat-text">
                 <strong id="compat-status-title">ĐÃ XÁC MINH TƯƠNG THÍCH</strong>
                 <small id="compat-status-desc">Khớp mã OEM với Toyota Vios 2019 (1.5L)</small>
@@ -203,8 +265,10 @@
 
           <!-- Search Trigger Action -->
           <button class="primary-button highlight-search-btn" id="btn-start-search-parts">
-            <span>Tìm giá Taobao & 1688</span>
-            <span>🔍</span>
+            <span>Tìm giá Taobao &amp; 1688</span>
+            <svg class="lucide lucide-search" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+            </svg>
           </button>
         </div>
 
@@ -220,14 +284,23 @@
         <div class="results-topbar">
           <div>
             <span class="eyebrow dark">NGUỒN HÀNG TRUNG QUỐC</span>
-            <h2>Kết quả Taobao & 1688</h2>
+            <h2>Kết quả Taobao &amp; 1688</h2>
           </div>
-          <button class="secondary-sm-btn" id="btn-back-to-parts">← Chọn lại</button>
+          <button class="secondary-sm-btn" id="btn-back-to-parts">
+            <svg class="lucide lucide-arrow-left" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:2px;">
+              <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
+            </svg>
+            Chọn lại
+          </button>
         </div>
 
         <!-- Exchange Rate & Demo Warning Bar -->
         <div class="exchange-rate-banner">
-          <span class="rate-badge">¥ ➜ ₫</span>
+          <span class="rate-badge">
+            <svg class="lucide lucide-arrow-left-right" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m9 7-5 5 5 5"/><path d="M4 12h16"/><path d="m15 17 5-5-5-5"/>
+            </svg>
+          </span>
           <div class="rate-details">
             <strong id="results-rate-text">1 CNY = 3.680 VND</strong>
             <small id="results-rate-source">Nguồn: Vietcombank · Cập nhật hôm nay</small>
@@ -255,14 +328,20 @@
         <!-- Manual Link Insertion & Anti-SSRF URL Verification -->
         <div class="manual-url-box">
           <div class="section-heading compact">
-            <div><span class="eyebrow dark">TÌM KIẾM THỦ CÔNG & DÁN LINK</span><h3>Kiểm tra link trực tiếp</h3></div>
+            <div><span class="eyebrow dark">TÌM KIẾM THỦ CÔNG &amp; DÁN LINK</span><h3>Kiểm tra link trực tiếp</h3></div>
           </div>
           <div class="external-search-links">
             <a href="#" id="link-open-taobao" target="_blank" rel="noopener" class="ext-btn taobao">
-              Mở tìm kiếm trên <b>Taobao.com ↗</b>
+              <span>Mở tìm trên <b>Taobao.com</b></span>
+              <svg class="lucide lucide-external-link" viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" style="vertical-align:-1px;margin-left:3px;">
+                <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              </svg>
             </a>
             <a href="#" id="link-open-1688" target="_blank" rel="noopener" class="ext-btn alibaba1688">
-              Mở tìm kiếm trên <b>1688.com ↗</b>
+              <span>Mở tìm trên <b>1688.com</b></span>
+              <svg class="lucide lucide-external-link" viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" style="vertical-align:-1px;margin-left:3px;">
+                <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              </svg>
             </a>
           </div>
           <div class="url-input-form">
@@ -271,7 +350,12 @@
               <input type="url" id="manual-product-url" placeholder="https://detail.1688.com/offer/..." autocomplete="off">
               <button type="button" id="btn-verify-manual-url" class="accent-btn">Xác minh</button>
             </div>
-            <small class="security-note">🛡️ Đã bật bảo mật Anti-SSRF: Chỉ chấp nhận tên miền chính thức của Taobao, Tmall và 1688.</small>
+            <small class="security-note">
+              <svg class="lucide lucide-shield-check" viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:3px;">
+                <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>
+              </svg>
+              Đã bật bảo mật Anti-SSRF: Chỉ chấp nhận tên miền chính thức của Taobao, Tmall và 1688.
+            </small>
           </div>
         </div>
       </div>
@@ -285,7 +369,11 @@
         <span class="eyebrow dark">SMART PRICING ENGINE</span>
         <h2 id="pricing-title">Tính giá niêm yết Gara</h2>
       </div>
-      <button class="close-button" type="button" data-close>×</button>
+      <button class="close-button" type="button" data-close aria-label="Đóng">
+        <svg class="lucide lucide-x" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+        </svg>
+      </button>
     </div>
     
     <div class="pricing-container" id="pricing-content">
@@ -300,19 +388,36 @@
         <span class="eyebrow dark">BẢN BÁO GIÁ GARA</span>
         <h2>Báo giá gửi khách hàng</h2>
       </div>
-      <button class="close-button" type="button" data-close>×</button>
+      <button class="close-button" type="button" data-close aria-label="Đóng">
+        <svg class="lucide lucide-x" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+        </svg>
+      </button>
     </div>
 
     <!-- Toggle Customer Mode vs Internal Garage Mode -->
     <div class="quote-mode-toggle-bar">
       <span class="mode-label">Chế độ hiển thị:</span>
       <div class="toggle-switch-wrapper">
-        <button type="button" class="mode-btn active" id="btn-mode-customer">👁 Khách hàng xem</button>
-        <button type="button" class="mode-btn" id="btn-mode-internal">🔒 Quản lý nội bộ</button>
+        <button type="button" class="mode-btn active" id="btn-mode-customer">
+          <svg class="lucide lucide-eye" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;">
+            <path d="2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>
+          </svg>
+          Khách hàng xem
+        </button>
+        <button type="button" class="mode-btn" id="btn-mode-internal">
+          <svg class="lucide lucide-lock" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;">
+            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          Quản lý nội bộ
+        </button>
       </div>
     </div>
     <div class="security-privacy-notice" id="quote-security-notice">
-      🔒 Chế độ khách hàng: <b>Đã ẩn hoàn toàn</b> giá nhập sàn (CNY), tên sàn Taobao/1688, phí mua hộ và % lãi.
+      <svg class="lucide lucide-shield-check" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:4px;">
+        <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>
+      </svg>
+      Chế độ khách hàng: <b>Đã ẩn hoàn toàn</b> giá nhập sàn (CNY), tên sàn Taobao/1688, phí mua hộ và % lãi.
     </div>
 
     <div class="quotation-content" id="quotation-content">
@@ -325,9 +430,13 @@
     <div class="sheet-head">
       <div>
         <span class="eyebrow dark">CẤU HÌNH GARA</span>
-        <h2>Cài đặt Tỷ giá & Markup</h2>
+        <h2>Cài đặt Tỷ giá &amp; Markup</h2>
       </div>
-      <button class="close-button" type="button" data-close>×</button>
+      <button class="close-button" type="button" data-close aria-label="Đóng">
+        <svg class="lucide lucide-x" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+        </svg>
+      </button>
     </div>
     
     <form id="settings-form" class="settings-form">
@@ -367,7 +476,12 @@
           </select>
         </label>
       </div>
-      <button class="primary-button" type="submit">Lưu cấu hình <span>✓</span></button>
+      <button class="primary-button" type="submit">
+        <span>Lưu cấu hình</span>
+        <svg class="lucide lucide-check" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </button>
     </form>
   </dialog>
 

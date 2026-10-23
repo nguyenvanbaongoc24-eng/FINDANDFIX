@@ -455,7 +455,9 @@ function renderOtherPartsList() {
 
   list.innerHTML = others.map(p => `
     <div class="other-part-card" data-part-idx="${p.originalIndex}">
-      <div class="other-part-icon">⚙</div>
+      <div class="other-part-icon">
+        <svg class="lucide lucide-settings-2" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>
+      </div>
       <div>
         <strong>${escapeHtml(p.name_vi)}</strong>
         <small>${escapeHtml(p.oem_code || 'Chưa rõ mã')} · ${escapeHtml(p.confidence_label || '')}</small>
@@ -606,7 +608,10 @@ function renderSearchResults(filterType = 'all') {
               ${escapeHtml(product.source_name)}
             </span>
             <h4 class="product-title-vi">${escapeHtml(product.title_vi)}</h4>
-            <span class="product-shop-name">🏪 ${escapeHtml(product.shop_name || 'Cửa hàng xác thực')}</span>
+            <span class="product-shop-name">
+              <svg class="lucide lucide-store" viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:4px;"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/></svg>
+              ${escapeHtml(product.shop_name || 'Cửa hàng xác thực')}
+            </span>
           </div>
         </div>
 
@@ -623,10 +628,11 @@ function renderSearchResults(filterType = 'all') {
         <div class="product-actions-bar">
           <button class="btn-markup-30" data-calc-pricing="${escapeHtml(product.id)}">
             <span>Lấy giá niêm yết (+30%)</span>
-            <span>⚡</span>
+            <svg class="lucide lucide-zap" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
           </button>
           <a class="btn-source-link" href="${escapeHtml(product.detail_url)}" target="_blank" rel="noopener noreferrer">
-            Xem nguồn ↗
+            <span>Xem nguồn</span>
+            <svg class="lucide lucide-external-link" viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-left:3px;"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
           </a>
         </div>
       </article>
@@ -776,7 +782,7 @@ function renderPricingDialogContent(product, currentMarkup) {
 
     <button class="primary-button" id="btn-add-to-quote-now">
       <span>Thêm vào Báo giá Khách hàng</span>
-      <span>＋</span>
+      <svg class="lucide lucide-plus" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
     </button>
   `;
 
@@ -913,12 +919,15 @@ function renderQuotationContent() {
 
     <div class="quotation-actions-group">
       <button type="button" class="btn-copy-zalo" id="btn-copy-zalo">
-        <span>💬 Sao chép tin Zalo</span>
+        <svg class="lucide lucide-message-square" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>Sao chép gửi Zalo</span>
       </button>
       <button type="button" class="btn-share-mobile" id="btn-share-quote">
-        <span>Chia sẻ ↗</span>
+        <svg class="lucide lucide-share-2" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>
+        <span>Chia sẻ</span>
       </button>
       <button type="button" class="btn-print-quote" id="btn-print-quote">
+        <svg class="lucide lucide-printer" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
         <span>In PDF</span>
       </button>
     </div>

@@ -2,49 +2,271 @@
 <html lang="vi">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#071821">
-  <meta name="description" content="Tra cứu tài liệu sửa chữa ô tô với dữ liệu mẫu hợp pháp.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0F172A">
+  <meta name="description" content="Find And Fix — Kho tài liệu kỹ thuật, sơ đồ điện, DTC và tra cứu phụ tùng AI dành cho gara.">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./acquisition.css">
-  <style>.quick-link{border:1px solid var(--line);border-radius:15px;background:var(--card);color:var(--ink);text-align:left;padding:13px;min-height:112px;text-decoration:none}.quick-link span{display:block;color:#bf7d28;font-size:24px;margin-bottom:9px}.quick-link b,.quick-link small{display:block}.quick-link b{font-size:12px}.quick-link small{font:10px/1.4 'DM Sans',sans-serif;color:var(--soft);margin-top:4px}</style>
-  <title>Garage Atlas</title>
+  <title>Find And Fix — Workspace Sửa Chữa & Quản Lý Gara</title>
 </head>
 <body>
   <div class="app" id="app">
-    <header class="appbar"><div class="logo" aria-hidden="true">GA</div><div><strong>Garage Atlas</strong><small>REPAIR REFERENCE</small></div><button id="theme-toggle" class="icon" aria-label="Đổi giao diện">◐</button></header>
+    <!-- Top Appbar -->
+    <header class="appbar">
+      <div class="logo" aria-hidden="true">FF</div>
+      <div>
+        <strong>Find And Fix</strong>
+        <small>GARAGE WORKSPACE</small>
+      </div>
+      <button id="theme-toggle" class="icon" aria-label="Đổi giao diện Sáng / Tối" title="Chuyển chế độ Sáng / Tối">
+        <svg class="lucide lucide-moon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+        </svg>
+      </button>
+    </header>
+
     <main>
+      <!-- HOME PAGE -->
       <section class="page active" id="home-page">
-        <div class="hero"><span class="eyebrow">MVP · DỮ LIỆU MẪU HỢP PHÁP</span><h1>Tra đúng xe.<br><em>Sửa có căn cứ.</em></h1><p>Kho tài liệu kỹ thuật, sơ đồ điện và DTC dành cho gara trên thiết bị di động.</p><button class="primary" data-nav="search">Bắt đầu tra cứu <b>→</b></button></div>
-        <section class="quick"><a class="quick-link" href="./scanner/" aria-label="Mở AI Parts Scanner" style="border-color:#e6a940;"><span style="color:#e6a940;">📷</span><b>Quét phụ tùng AI</b><small>Tra giá Taobao / 1688</small></a><a class="quick-link" href="./ewd/" aria-label="Mở EWD Library"><span>⌁</span><b>EWD Library</b><small>Sơ đồ, pinout & mass</small></a><button data-nav="search" data-focus="dtc"><span>{ }</span><b>Mã lỗi DTC</b><small>OBD-II mẫu</small></button><button data-nav="saved"><span>★</span><b>Đã lưu</b><small>Bookmark local</small></button></section>
-        <p class="notice">Các tài liệu trong MVP do dự án tạo để kiểm thử. Không phải tài liệu OEM, không thay thế quy trình sửa chữa của hãng.</p>
+        <div class="hero">
+          <span class="eyebrow">DỮ LIỆU KỸ THUẬT &amp; CÔNG CỤ THỰC CHIẾN</span>
+          <h1>Tra đúng xe.<br><em>Sửa có căn cứ.</em></h1>
+          <p>Kho tài liệu kỹ thuật, sơ đồ mạch điện EWD, mã lỗi DTC và AI quét phụ tùng sàn Taobao / 1688.</p>
+          <button class="primary" data-nav="search">
+            <span>Bắt đầu tra cứu</span>
+            <svg class="lucide lucide-arrow-right" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Vehicle Profile Card -->
+        <section class="card vehicle-card">
+          <div>
+            <span class="eyebrow muted">XE ĐANG TRA CỨU</span>
+            <h2 id="vehicle-label">Chưa chọn xe</h2>
+            <p id="vehicle-detail">Chọn xe để lọc tài liệu và kiểm tra tương thích phụ tùng.</p>
+          </div>
+          <button class="text-button" id="open-vehicle">
+            <svg class="lucide lucide-car" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;margin-right:4px;">
+              <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/>
+            </svg>
+            Chọn xe
+          </button>
+        </section>
+
+        <!-- Quick Access Grid -->
+        <section class="quick">
+          <a class="quick-link highlight" href="./scanner/" aria-label="Mở AI Parts Scanner">
+            <div class="quick-icon-wrapper">
+              <svg class="lucide lucide-camera" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/>
+              </svg>
+            </div>
+            <div>
+              <b>Quét phụ tùng AI</b>
+              <small>Tra giá Taobao / 1688 · +30%</small>
+            </div>
+          </a>
+
+          <a class="quick-link" href="./ewd/" aria-label="Mở EWD Library">
+            <div class="quick-icon-wrapper">
+              <svg class="lucide lucide-zap" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+            </div>
+            <div>
+              <b>EWD Library</b>
+              <small>Sơ đồ, pinout &amp; mass</small>
+            </div>
+          </a>
+
+          <button class="quick-link" data-nav="search" data-focus="dtc">
+            <div class="quick-icon-wrapper">
+              <svg class="lucide lucide-code-xml" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/>
+              </svg>
+            </div>
+            <div>
+              <b>Mã lỗi DTC</b>
+              <small>OBD-II &amp; quy trình đo</small>
+            </div>
+          </button>
+
+          <button class="quick-link" data-nav="saved">
+            <div class="quick-icon-wrapper">
+              <svg class="lucide lucide-bookmark" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>
+              </svg>
+            </div>
+            <div>
+              <b>Đã lưu</b>
+              <small>Bookmark thiết bị</small>
+            </div>
+          </button>
+        </section>
+
+        <p class="notice">
+          <svg class="lucide lucide-info" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;">
+            <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+          </svg>
+          <span>Tài liệu kỹ thuật và dữ liệu giá sàn phục vụ tham khảo gara. Đối chiếu số khung VIN và mã OEM thực tế trước khi đặt hàng.</span>
+        </p>
       </section>
 
+      <!-- SEARCH PAGE -->
       <section class="page" id="search-page">
-        <div class="section-head"><span class="eyebrow muted">TRA CỨU</span><h1>Kho kỹ thuật</h1><p>Tìm theo mã DTC, tên hệ thống hoặc tài liệu mẫu.</p></div>
-        <label class="search"><span>⌕</span><input id="query" type="search" placeholder="Ví dụ: P0300, mạch sạc" autocomplete="off"><button id="clear-query" type="button" aria-label="Xóa">×</button></label>
-        <div class="chips" id="filters"><button class="active" data-filter="all">Tất cả</button><button data-filter="document">Tài liệu</button><button data-filter="ewd">Sơ đồ điện</button><button data-filter="dtc">DTC</button></div>
-        <p class="result-status" id="result-status" aria-live="polite"></p><div id="search-results" class="results"></div>
+        <div class="section-head">
+          <span class="eyebrow muted">TRA CỨU KHO KỸ THUẬT</span>
+          <h1>Kho kỹ thuật</h1>
+          <p>Tìm theo mã lỗi DTC, tên hệ thống hoặc tài liệu nguyên lý.</p>
+        </div>
+
+        <label class="search">
+          <span class="search-icon">
+            <svg class="lucide lucide-search" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+            </svg>
+          </span>
+          <input id="query" type="search" placeholder="Ví dụ: P0300, mạch sạc, máy phát" autocomplete="off">
+          <button id="clear-query" type="button" aria-label="Xóa từ khóa">
+            <svg class="lucide lucide-x" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
+        </label>
+
+        <div class="chips" id="filters">
+          <button class="active" data-filter="all">Tất cả</button>
+          <button data-filter="document">Tài liệu</button>
+          <button data-filter="ewd">Sơ đồ điện</button>
+          <button data-filter="dtc">Mã lỗi DTC</button>
+        </div>
+
+        <p class="result-status" id="result-status" aria-live="polite"></p>
+        <div id="search-results" class="results"></div>
       </section>
 
+      <!-- SAVED / BOOKMARKS PAGE -->
       <section class="page" id="saved-page">
-        <div class="section-head"><span class="eyebrow muted">CÁ NHÂN</span><h1>Đã lưu</h1><p>Bookmark chỉ lưu trên trình duyệt hiện tại.</p></div><div id="saved-results" class="results"></div>
+        <div class="section-head">
+          <span class="eyebrow muted">CÁ NHÂN</span>
+          <h1>Đã lưu</h1>
+          <p>Danh sách tài liệu đã bookmark trên thiết bị này.</p>
+        </div>
+        <div id="saved-results" class="results"></div>
       </section>
 
+      <!-- ADMIN / DATA GOVERNANCE PAGE -->
       <section class="page" id="admin-page">
-        <div class="section-head"><span class="eyebrow muted">ADMIN · DEMO</span><h1>Quản trị dữ liệu</h1><p>Chỉ mô phỏng workflow, không upload hay crawl nguồn ngoài.</p></div>
-        <div class="admin-grid"><article class="card"><span class="stat">3</span><b>Tài liệu sample</b><small>Được phép phát hành</small></article><article class="card"><span class="stat">0</span><b>Nguồn crawl</b><small>Chưa có nguồn duyệt</small></article><article class="card"><span class="stat">0</span><b>Job đang chạy</b><small>Ingestion tắt</small></article></div>
-        <article class="card admin-note"><h2>Kiểm soát quyền</h2><p>Chỉ admin có thể tạo nguồn, giấy phép và ingestion job sau khi Supabase được cấu hình. Crawler bị chặn nếu không có approval record.</p><button class="secondary" id="admin-demo">Xem checklist upload</button></article>
-        <section class="source-registry" aria-labelledby="source-registry-title"><div class="section-head compact"><span class="eyebrow muted">SOURCE REGISTRY</span><h2 id="source-registry-title">Nguồn dữ liệu</h2><p id="source-registry-status">Đang nạp registry…</p></div><div id="source-registry-list" class="results"></div></section>
+        <div class="section-head">
+          <span class="eyebrow muted">ADMIN · DEMO</span>
+          <h1>Quản trị dữ liệu</h1>
+          <p>Mô phỏng quy trình kiểm duyệt bản quyền, ingestion và registry.</p>
+        </div>
+
+        <div class="admin-grid">
+          <article class="card">
+            <span class="stat">3</span>
+            <b>Tài liệu sample</b>
+            <small>Được phép phát hành</small>
+          </article>
+          <article class="card">
+            <span class="stat">0</span>
+            <b>Nguồn crawl</b>
+            <small>Chưa có nguồn duyệt</small>
+          </article>
+          <article class="card">
+            <span class="stat">0</span>
+            <b>Job đang chạy</b>
+            <small>Ingestion tắt</small>
+          </article>
+        </div>
+
+        <article class="card admin-note">
+          <h2>Kiểm soát quyền</h2>
+          <p>Chỉ admin có thể tạo nguồn, giấy phép và ingestion job sau khi Supabase được cấu hình. Crawler bị chặn nếu không có approval record.</p>
+          <button class="secondary" id="admin-demo">Xem checklist upload</button>
+        </article>
+
+        <section class="source-registry" aria-labelledby="source-registry-title">
+          <div class="section-head compact">
+            <span class="eyebrow muted">SOURCE REGISTRY</span>
+            <h2 id="source-registry-title">Nguồn dữ liệu</h2>
+            <p id="source-registry-status">Đang nạp registry…</p>
+          </div>
+          <div id="source-registry-list" class="results"></div>
+        </section>
       </section>
     </main>
-    <nav class="bottom" aria-label="Điều hướng"><button class="active" data-nav="home"><span>⌂</span><small>Trang chủ</small></button><button data-nav="search"><span>⌕</span><small>Tra cứu</small></button><button data-nav="saved"><span>★</span><small>Đã lưu</small></button><button data-nav="admin"><span>▦</span><small>Quản trị</small></button></nav>
+
+    <!-- Bottom Navigation Bar (Thumb ergonomic) -->
+    <nav class="bottom" aria-label="Điều hướng">
+      <button class="active" data-nav="home">
+        <svg class="lucide lucide-home" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <small>Trang chủ</small>
+      </button>
+
+      <button data-nav="search">
+        <svg class="lucide lucide-search" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+        </svg>
+        <small>Tra cứu</small>
+      </button>
+
+      <button data-nav="saved">
+        <svg class="lucide lucide-bookmark" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>
+        </svg>
+        <small>Đã lưu</small>
+      </button>
+
+      <button data-nav="admin">
+        <svg class="lucide lucide-layout-grid" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>
+        </svg>
+        <small>Quản trị</small>
+      </button>
+    </nav>
   </div>
 
-  <dialog id="vehicle-dialog" class="sheet"><form method="dialog" id="vehicle-form"><header><div><span class="eyebrow muted">CHỌN XE</span><h2>Phạm vi tra cứu</h2></div><button class="icon" value="cancel" aria-label="Đóng">×</button></header><label>Hãng<select id="make" required></select></label><label>Dòng xe<select id="model" required></select></label><label>Phiên bản / động cơ<select id="variant" required></select></label><label>Năm sản xuất<select id="year" required></select></label><button class="primary" value="default">Áp dụng xe này <b>→</b></button></form></dialog>
-  <dialog id="detail-dialog" class="sheet wide"><div id="detail-content"></div></dialog>
+  <!-- Vehicle Selection Dialog -->
+  <dialog id="vehicle-dialog" class="sheet">
+    <form method="dialog" id="vehicle-form">
+      <header>
+        <div>
+          <span class="eyebrow muted">CHỌN XE</span>
+          <h2>Phạm vi tra cứu</h2>
+        </div>
+        <button class="icon" value="cancel" aria-label="Đóng">
+          <svg class="lucide lucide-x" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+          </svg>
+        </button>
+      </header>
+      <label>Hãng xe<select id="make" required></select></label>
+      <label>Dòng xe<select id="model" required></select></label>
+      <label>Phiên bản / Động cơ<select id="variant" required></select></label>
+      <label>Năm sản xuất<select id="year" required></select></label>
+      <button class="primary" value="default">
+        <span>Áp dụng xe này</span>
+        <svg class="lucide lucide-arrow-right" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+        </svg>
+      </button>
+    </form>
+  </dialog>
+
+  <!-- Detail Sheet Dialog -->
+  <dialog id="detail-dialog" class="sheet wide">
+    <div id="detail-content"></div>
+  </dialog>
+
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
   <script src="./supabase-config.js" defer></script>
   <script src="./app.js" defer></script>
   <script src="./acquisition-admin.js" defer></script>
