@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#071821">
+  <meta name="description" content="Tra cứu DTC, phụ tùng và dữ liệu NHTSA có nguồn gốc rõ ràng.">
+  <link rel="stylesheet" href="./open-data.css">
+  <title>Dữ liệu mở · Garage Atlas</title>
+</head>
+<body>
+  <div class="app">
+    <header><a href="../" aria-label="Về Garage Atlas">‹</a><div><small>OPEN DATA CATALOG</small><strong>Tra cứu sửa chữa</strong></div></header>
+    <main>
+      <section class="hero"><span>DỮ LIỆU CÓ NGUỒN GỐC</span><h1>Tìm lỗi, xe<br>và phụ tùng.</h1><p>Catalog nhỏ từ NHTSA và MechanicDB sample. Mỗi kết quả giữ attribution và phạm vi giấy phép.</p></section>
+      <section class="vin-card"><div><b>Tra VIN NHTSA</b><small>Giải mã trực tiếp, cache cục bộ 24 giờ</small></div><form id="vin-form"><input id="vin" minlength="17" maxlength="17" placeholder="Ví dụ: 1HGCM82633A004352" aria-label="VIN 17 ký tự"><button>Tra VIN</button></form><div id="vin-result" class="live-result" aria-live="polite"></div></section>
+      <section class="lookup-card"><div class="tabs" role="tablist"><button class="active" data-kind="dtc">Mã lỗi</button><button data-kind="parts">Phụ tùng</button><button data-kind="vehicles">Recall</button><button data-kind="sources">Nguồn</button></div><label class="search"><span>⌕</span><input id="query" type="search" placeholder="P0420, cảm biến, wheel speed…" autocomplete="off"></label><div id="content" aria-live="polite"></div></section>
+      <p class="safety">Thông tin sửa chữa mang tính tham khảo. Hãy đối chiếu tài liệu kỹ thuật của hãng và tuân thủ an toàn trước khi thao tác.</p>
+    </main>
+  </div>
+  <script src="./open-data.js" defer></script>
+</body>
+</html>

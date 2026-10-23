@@ -12,6 +12,8 @@ Open `http://localhost:4173/mvp/`.
 
 EWD Library MVP: `http://localhost:4173/mvp/ewd/`. The viewer contains only project-created sample diagrams and metadata; reference services remain link-only until their rights are approved.
 
+Open automotive-data catalog: `http://localhost:4173/mvp/open-data/`. Refresh its rights-reviewed small batch with `python scripts/data/pipeline.py`; see `docs/data/RUNBOOK.md` for cache, license and Supabase import rules.
+
 ## Run verification
 
 ```powershell
