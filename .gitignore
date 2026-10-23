@@ -1,0 +1,15 @@
+# Local reverse-engineering artifacts and unreviewed source metadata
+/.analysis/
+/.tools/
+/rea/
+/data/
+/crawler/
+/mobile-web/
+/.git-remote-inspect/
+/__pycache__/
+*.pyc
+
+# Local-only configuration and credentials
+.env
+.env.*
+!.env.example
