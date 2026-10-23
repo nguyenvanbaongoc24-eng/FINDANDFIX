@@ -10,6 +10,8 @@ python -m http.server 4173
 
 Open `http://localhost:4173/mvp/`.
 
+EWD Library MVP: `http://localhost:4173/mvp/ewd/`. The viewer contains only project-created sample diagrams and metadata; reference services remain link-only until their rights are approved.
+
 ## Run verification
 
 ```powershell
@@ -23,3 +25,9 @@ The second command must stop before making a network request: project samples ar
 ## Supabase
 
 Run migrations in lexical order from `mvp/supabase/migrations/`. The publishable client may read published records under RLS; it cannot create schema, upload files or approve sources.
+
+## EWD design records
+
+- `EWD_SOURCE_ASSESSMENT.md` — source-rights decision table.
+- `EWD_SYSTEM_ARCHITECTURE.md` — metadata, viewer and RLS architecture.
+- `EWD_IMPLEMENTATION_PLAN.md` — staged rollout and approval gates.

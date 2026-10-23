@@ -8,6 +8,8 @@ python -m http.server 4173
 
 `http://localhost:4173/mvp/`
 
+EWD Library nằm tại `http://localhost:4173/mvp/ewd/`. Nó hiển thị SVG và metadata mẫu do dự án tạo, có zoom/pan, fullscreen, bookmark và liên kết sơ đồ; không tải hoặc render nội dung từ nguồn hạn chế.
+
 Trên Vercel, root URL tự chuyển đến `/mvp/`; không cần cấu hình lại Root Directory.
 
 Nó dùng sample data do dự án tạo, không dùng tài liệu hoặc hình ảnh của Carmin / Auto Repair Documents. Supabase schema có tại `supabase/migrations/0001_initial_schema.sql`; không migration hoặc kết nối cloud nếu chưa cấu hình `.env.local` bởi owner.

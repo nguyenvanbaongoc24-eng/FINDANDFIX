@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "sources": [
     {
       "id": "project-samples",
@@ -58,6 +58,53 @@
       "redistribution_allowed": false,
       "crawl_enabled": false,
       "notes": "Create a source record only after receiving a written license and approved URL scope."
+    },
+    {
+      "id": "operation-charm-reference",
+      "name": "Operation CHARM reference",
+      "base_url": null,
+      "status": "REJECTED",
+      "source_type": "unverified_reference",
+      "storage_allowed": false,
+      "redistribution_allowed": false,
+      "crawl_enabled": false,
+      "notes": "No official owner, terms, robots policy, or reuse license has been verified. It cannot be an ingestion source."
+    },
+    {
+      "id": "autozone-repair-guides-reference",
+      "name": "AutoZone Repair Guides",
+      "base_url": "https://www.autozone.com/lp/repair-help",
+      "status": "RESTRICTED",
+      "source_type": "reference_service",
+      "terms_url": "https://www.autozone.com/lp/termsAndConditions",
+      "storage_allowed": false,
+      "redistribution_allowed": false,
+      "crawl_enabled": false,
+      "notes": "Account-gated reference service. Allow only approved external links; no automated login, copying, caching, or format conversion."
+    },
+    {
+      "id": "toyota-tis-reference",
+      "name": "Toyota Technical Information System",
+      "base_url": "https://techinfo.toyota.com/",
+      "status": "RESTRICTED",
+      "source_type": "oem_service",
+      "terms_url": "https://techinfo.toyota.com/techInfoPortal/appmanager/t3/ti?_nfpb=true&_pageLabel=ti_legal",
+      "storage_allowed": false,
+      "redistribution_allowed": false,
+      "crawl_enabled": false,
+      "notes": "Authorized-user service. Link-only metadata may be entered by an admin; no crawl, cache, storage, OCR, or redistribution."
+    },
+    {
+      "id": "hyundai-gsw-reference",
+      "name": "Hyundai Global Service Way",
+      "base_url": "https://gsw.hyundai.com/",
+      "status": "RESTRICTED",
+      "source_type": "oem_service",
+      "terms_url": "https://gsw.hyundai.com/common/policyPop.action?kind=user",
+      "storage_allowed": false,
+      "redistribution_allowed": false,
+      "crawl_enabled": false,
+      "notes": "Hyundai intellectual-property service. Link-out only for users with their own authorized access."
     }
   ]
 }

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#071821">
+  <meta name="description" content="EWD Library minh họa — Garage Atlas">
+  <link rel="stylesheet" href="./ewd.css">
+  <style>body.dark{--ink:#e7f0ef;--muted:#a9bfbd;--line:#2b474c;--surface:#0c1d23;--card:#132c34}.dark .filter-card select,.dark .viewer-tools button,.dark .viewer-tools output,.dark .related button{background:#0c1d23;color:var(--ink)}.dark .stage-wrap{background:#14272b}.dark .technical{background:#173139}.dark .connector-grid{background:#0e2228}.dark .rights-note{background:#382d16;color:#f2d595;border-color:#745929}</style>
+  <title>EWD Library · Garage Atlas</title>
+</head>
+<body>
+  <div class="shell">
+    <header class="appbar"><a class="back" href="../" aria-label="Về Garage Atlas">‹</a><div><small>ELECTRICAL REFERENCE</small><strong>EWD Library</strong></div><button class="icon" id="theme" aria-label="Đổi giao diện">◐</button></header>
+    <main>
+      <section class="intro"><span class="eyebrow">MVP · DỮ LIỆU MẪU HỢP PHÁP</span><h1>Sơ đồ điện<br><em>theo đúng ngữ cảnh xe.</em></h1><p id="vehicle-label">Garage Atlas Training Sedan · 2024 · 1.6L Demo</p></section>
+      <section class="filter-card" aria-label="Phạm vi EWD"><label>Hãng<select id="make"><option>Garage Atlas · sample</option></select></label><label>Model<select id="model"><option>Training Sedan</option></select></label><label>Năm<select id="year"><option>2024</option></select></label></section>
+      <section class="library-head"><div><span class="eyebrow muted">THƯ VIỆN EWD</span><h2>Sơ đồ và dữ liệu kỹ thuật</h2></div><button class="bookmark-toggle" id="bookmarks" aria-pressed="false">★ <span>Đã lưu</span></button></section>
+      <div class="system-tabs" id="systems" aria-label="Lọc theo hệ thống"></div>
+      <p class="rights-note">Các mục mẫu là do Garage Atlas tạo. Nguồn OEM/AutoZone chỉ được lưu metadata và liên kết ngoài khi chưa có quyền lưu trữ.</p>
+      <section class="artifact-list" id="artifact-list" aria-live="polite"></section>
+    </main>
+  </div>
+  <dialog id="viewer" class="viewer-dialog">
+    <article>
+      <header class="viewer-header"><div><small id="viewer-type"></small><h2 id="viewer-title"></h2></div><button class="icon" id="close-viewer" aria-label="Đóng">×</button></header>
+      <div class="viewer-tools"><button data-zoom="out" aria-label="Thu nhỏ">−</button><output id="zoom-label">100%</output><button data-zoom="in" aria-label="Phóng to">+</button><button data-zoom="reset">Khôi phục</button><button id="fullscreen">Toàn màn hình</button><button id="save-artifact">☆ Lưu</button></div>
+      <div class="stage-wrap"><div id="stage" class="stage" aria-label="Khu vực xem sơ đồ"></div></div>
+      <section class="info-panel" id="info-panel"></section>
+      <section class="related"><span class="eyebrow muted">SƠ ĐỒ LIÊN QUAN</span><div id="related-list"></div></section>
+    </article>
+  </dialog>
+  <template id="schematic-template"><svg class="diagram" viewBox="0 0 820 480" role="img" aria-label="Minh họa sơ đồ phân phối nguồn IG1"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#dce3e0" stroke-width="1"/></pattern></defs><rect width="820" height="480" fill="url(#grid)"/><text x="42" y="48" font-size="22" font-family="Arial" fill="#173a44" font-weight="700">IG1 POWER DISTRIBUTION · TRAINING SAMPLE</text><rect x="64" y="101" width="130" height="58" rx="10" fill="#193e49"/><text x="92" y="136" font-size="17" font-family="Arial" fill="#fff">BATTERY +B</text><line x1="194" y1="130" x2="305" y2="130" stroke="#d02f35" stroke-width="8"/><rect x="305" y="101" width="128" height="58" rx="10" fill="#fff" stroke="#b8c7c3" stroke-width="3"/><text x="336" y="136" font-size="17" font-family="Arial" fill="#173a44">FUSE 15A</text><line x1="433" y1="130" x2="548" y2="130" stroke="#d02f35" stroke-width="8"/><circle cx="585" cy="130" r="38" fill="#e8b756"/><text x="559" y="136" font-size="16" font-family="Arial" fill="#28210f">IG RELAY</text><line x1="623" y1="130" x2="730" y2="130" stroke="#1d75bc" stroke-width="8"/><rect x="657" y="259" width="128" height="65" rx="10" fill="#fff" stroke="#b8c7c3" stroke-width="3"/><text x="684" y="297" font-size="18" font-family="Arial" fill="#173a44">ECM A-12</text><line x1="730" y1="130" x2="730" y2="259" stroke="#1d75bc" stroke-width="8"/><line x1="730" y1="324" x2="730" y2="386" stroke="#222" stroke-width="6"/><line x1="692" y1="386" x2="768" y2="386" stroke="#222" stroke-width="4"/><line x1="703" y1="398" x2="757" y2="398" stroke="#222" stroke-width="4"/><line x1="714" y1="410" x2="746" y2="410" stroke="#222" stroke-width="4"/><text x="672" y="445" font-size="14" font-family="Arial" fill="#536b71">G101</text><text x="64" y="215" font-size="15" font-family="Arial" fill="#536b71">Màu dây: R = đỏ · L-B = xanh dương sọc đen</text><text x="64" y="242" font-size="13" font-family="Arial" fill="#788d91">Chỉ dùng để kiểm thử trình xem, không phải sơ đồ OEM.</text></svg></template>
+  <script src="./ewd.js" defer></script>
+</body>
+</html>

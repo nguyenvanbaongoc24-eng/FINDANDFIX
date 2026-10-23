@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "disclaimer": "Mọi sơ đồ trong file này là minh họa do Garage Atlas tạo để kiểm thử giao diện; không phải tài liệu OEM.",
+  "vehicle": { "manufacturer": "Garage Atlas", "model": "Training Sedan", "year": 2024, "engine": "1.6L Demo" },
+  "systems": [
+    { "id": "power", "name": "Nguồn & khởi động", "icon": "⚡" },
+    { "id": "engine", "name": "Điều khiển động cơ", "icon": "◉" },
+    { "id": "body", "name": "Body & chiếu sáng", "icon": "◫" },
+    { "id": "network", "name": "Mạng CAN/LIN", "icon": "⌁" }
+  ],
+  "artifacts": [
+    { "id": "power-main", "title": "Phân phối nguồn IG1 — minh họa", "system": "power", "type": "Wiring schematic", "format": "SVG", "kind": "schematic", "source": "Garage Atlas project samples", "status": "APPROVED SAMPLE", "related": ["connector-c101", "ground-g101", "colors-basic"] },
+    { "id": "ecu-ecm", "title": "ECM connector A — minh họa pinout", "system": "engine", "type": "ECU pinout", "format": "HTML metadata", "kind": "pinout", "source": "Garage Atlas project samples", "status": "APPROVED SAMPLE", "related": ["connector-c101", "colors-basic"] },
+    { "id": "connector-c101", "title": "C101 — connector view minh họa", "system": "power", "type": "Connector view", "format": "SVG", "kind": "connector", "source": "Garage Atlas project samples", "status": "APPROVED SAMPLE", "related": ["power-main", "ecu-ecm"] },
+    { "id": "ground-g101", "title": "G101 — vị trí mass minh họa", "system": "body", "type": "Ground location", "format": "SVG", "kind": "ground", "source": "Garage Atlas project samples", "status": "APPROVED SAMPLE", "related": ["power-main"] },
+    { "id": "colors-basic", "title": "Mã màu dây điện — legend minh họa", "system": "power", "type": "Wiring color codes", "format": "HTML metadata", "kind": "colors", "source": "Garage Atlas project samples", "status": "APPROVED SAMPLE", "related": ["power-main", "ecu-ecm"] }
+  ]
+}
