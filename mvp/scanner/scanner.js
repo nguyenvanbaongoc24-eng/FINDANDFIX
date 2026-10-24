@@ -10,7 +10,7 @@ const saveLocal = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); 
 const formatVND = n => (Number(n) || 0).toLocaleString('vi-VN') + ' ₫';
 const localDate = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
 
-let vehicle = getSaved('ga-vehicle', getSaved('ard-vehicle', { make: 'Toyota', model: 'Vios', year: 2019, variant: '1.5L 2NR-FE' }));
+let vehicle = getSaved('ga-vehicle', getSaved('ard-vehicle', {}));
 
 let settings = getSaved('ard-settings', {
   cnyRate: 3680,
@@ -39,7 +39,7 @@ let scannerState = {
     items: [],
     customerName: 'Khách hàng gara',
     plate: '51A-123.45',
-    vehicleDesc: 'Toyota Vios 2019 1.5L',
+    vehicleDesc: '',
     laborCost: 150000,
     warranty: '6 tháng'
   }),
@@ -247,7 +247,7 @@ function legacyLoadPhotoFromFile(file) {
   reader.readAsDataURL(file);
 }
 
-function loadSamplePhoto() {
+function retiredLoadSamplePhoto() {
   const img = new Image();
   img.crossOrigin = 'anonymous';
   img.onload = () => {
@@ -324,8 +324,9 @@ async function legacyAnalyzePartsWithAI() {
     }
   } catch (e) {}
 
-  // Standalone client fallback
-  scannerState.detectedParts = [
+  // Retired pipeline: a failed request must remain empty and visible as an error.
+  scannerState.detectedParts = [];
+  /*
     {
       id: 'part_wiper_blade',
       name_vi: 'Lưỡi gạt mưa trước (Bên lái / Bên phụ)',
@@ -362,14 +363,14 @@ async function legacyAnalyzePartsWithAI() {
       confidence_label: 'Khá (82%)',
       bounding_box: { ymin: 0.58, xmin: 0.05, ymax: 0.90, xmax: 0.45 }
     }
-  ];
+  ]; */
 
   scannerState.activePartIndex = 0;
   setScannerStep(3);
   renderPartsStage();
 }
 
-function renderPartsStage() {
+function legacyRenderPartsStage() {
   const previewImg = $('#detected-photo-preview');
   const canvas = $('#crop-canvas');
   if (previewImg && canvas) {
@@ -1075,9 +1076,9 @@ init();
 
 // P0 Vision hardening: these declarations supersede the legacy demo pipeline.
 let visionAbortController = null;
-function createVisionRequestId() { return globalThis.crypto?.randomUUID?.() || `vision-${Date.now()}-${Math.random().toString(16).slice(2)}`; }
+function createVisionRequestId() { if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID(); const token = `${Date.now().toString(16)}${Math.random().toString(16).slice(2)}`.padEnd(32, '0').slice(0, 32); return `${token.slice(0, 8)}-${token.slice(8, 12)}-4${token.slice(13, 16)}-8${token.slice(17, 20)}-${token.slice(20)}`; }
 function recognitionMessage(status, detail) {
-  const messages = { image_invalid: 'Ảnh không hợp lệ hoặc vượt giới hạn. Hãy chọn JPEG, PNG hoặc WebP rõ nét.', image_upload_failed: 'Không gửi được ảnh. Hãy kiểm tra kết nối và thử lại.', vision_unavailable: 'Dịch vụ Vision hiện chưa sẵn sàng. Không có kết quả thay thế.', free_tier_quota_exhausted: 'Đã đạt giới hạn AI miễn phí. Hãy thử lại sau.', recognition_failed: 'Không thể đọc kết quả nhận diện. Hãy thử lại với ảnh khác.', object_unknown: 'Chưa xác định được vật thể. Hãy chụp gần hơn, đủ sáng hơn.', multiple_objects_detected: 'Có nhiều vật thể. Chọn đúng vật thể cần tra giá.', needs_user_confirmation: 'Cần bạn xác nhận hoặc sửa thông tin trước khi tra giá.', search_unavailable: 'Chưa có nguồn giá được cấp quyền cho tìm tự động.', price_not_found: 'Chưa tìm thấy giá đáng tin cậy.' };
+  const messages = { image_invalid: 'Ảnh không hợp lệ hoặc vượt giới hạn. Hãy chọn JPEG, PNG hoặc WebP rõ nét.', image_upload_failed: 'Không gửi được ảnh. Hãy kiểm tra kết nối và thử lại.', image_integrity_invalid: 'Metadata ảnh không hợp lệ. Hãy chọn ảnh lại rồi thử lại.', image_integrity_mismatch: 'Ảnh đã gửi không trùng với ảnh bạn vừa xác nhận. Hãy chọn ảnh lại.', vision_unavailable: 'Dịch vụ Vision hiện chưa sẵn sàng. Không có kết quả thay thế.', free_tier_quota_exhausted: 'Đã đạt giới hạn AI miễn phí. Hãy thử lại sau.', recognition_failed: 'Không thể đọc kết quả nhận diện. Hãy thử lại với ảnh khác.', object_unknown: 'Chưa xác định được vật thể. Hãy chụp gần hơn, đủ sáng hơn.', no_clear_product: 'Chưa thấy sản phẩm rõ ràng trong ảnh. Hãy chụp gần hơn và đủ sáng hơn.', multiple_objects_detected: 'Có nhiều vật thể. Chọn đúng vật thể cần tra giá.', needs_user_confirmation: 'Cần bạn xác nhận hoặc sửa thông tin trước khi tra giá.', search_unavailable: 'Chưa có nguồn giá được cấp quyền cho tìm tự động.', price_not_found: 'Chưa tìm thấy giá đáng tin cậy.' };
   return detail || messages[status] || 'Không có kết quả để hiển thị.';
 }
 function showRecognitionState(status, detail) {
@@ -1087,10 +1088,10 @@ function showRecognitionState(status, detail) {
   $('#part-active-card')?.setAttribute('hidden', ''); $('#other-parts-list')?.replaceChildren(); $('#bbox-layer')?.replaceChildren(); $('#btn-recognize-again')?.addEventListener('click', () => setScannerStep(2));
 }
 function hideRecognitionState() { $('#recognition-state')?.setAttribute('hidden', ''); $('#part-active-card')?.removeAttribute('hidden'); }
-function optimizedVisionImage(canvas) { const limit = 1600, scale = Math.min(1, limit / Math.max(canvas.width, canvas.height)), output = document.createElement('canvas'); output.width = Math.max(1, Math.round(canvas.width * scale)); output.height = Math.max(1, Math.round(canvas.height * scale)); output.getContext('2d').drawImage(canvas, 0, 0, output.width, output.height); const dataUrl = output.toDataURL('image/jpeg', 0.82); if (dataUrl.length > 4_000_000) throw new Error('image_invalid'); return dataUrl; }
-async function analyzePartsWithAI() {
+function retiredOptimizedVisionImage(canvas) { const limit = 1600, scale = Math.min(1, limit / Math.max(canvas.width, canvas.height)), output = document.createElement('canvas'); output.width = Math.max(1, Math.round(canvas.width * scale)); output.height = Math.max(1, Math.round(canvas.height * scale)); output.getContext('2d').drawImage(canvas, 0, 0, output.width, output.height); const dataUrl = output.toDataURL('image/jpeg', 0.82); if (dataUrl.length > 4_000_000) throw new Error('image_invalid'); return dataUrl; }
+async function retiredAnalyzePartsWithAI() {
   const canvas = $('#crop-canvas'); if (!canvas || !scannerState.capturedImage) { setScannerStep(3); showRecognitionState('image_invalid'); return; }
-  let image; try { image = optimizedVisionImage(canvas); } catch { setScannerStep(3); showRecognitionState('image_invalid'); return; }
+  let image; try { image = retiredOptimizedVisionImage(canvas); } catch { setScannerStep(3); showRecognitionState('image_invalid'); return; }
   visionAbortController?.abort(); visionAbortController = new AbortController(); const requestId = createVisionRequestId(); scannerState.activeVisionRequestId = requestId; scannerState.detectedParts = []; toast('Đang phân tích ảnh gốc…');
   try {
     const response = await fetch('/api/ai/recognize-part', { method: 'POST', headers: {'Content-Type': 'application/json'}, signal: visionAbortController.signal, body: JSON.stringify({request_id: requestId, image, vehicle}) });
@@ -1100,11 +1101,174 @@ async function analyzePartsWithAI() {
     scannerState.detectedParts = objects.map(object => ({...object, name_vi: object.name_vi || '', name_en: object.name_en || '', name_zh: object.name_zh || '', oem_code: object.oem_code || object.part_number || '', bounding_box: object.box_2d || null, identification_status: object.requires_verification ? 'needs_user_confirmation' : 'product_identified'})); scannerState.activePartIndex = 0; scannerState.recognitionStatus = data.status; setScannerStep(3); renderPartsStage(); if (data.status === 'multiple_objects_detected' || data.status === 'needs_user_confirmation') { showRecognitionState(data.status); $('#part-active-card')?.removeAttribute('hidden'); }
   } catch (error) { if (error.name !== 'AbortError') { setScannerStep(3); showRecognitionState('image_upload_failed'); } }
 }
-function renderBoundingBoxes() { const layer = $('#bbox-layer'); if (!layer) return; layer.replaceChildren(); scannerState.detectedParts.forEach((part, index) => { const box = part.bounding_box; if (!Array.isArray(box) || box.length !== 4) return; const [ymin, xmin, ymax, xmax] = box; if (![ymin, xmin, ymax, xmax].every(Number.isFinite) || ymax <= ymin || xmax <= xmin) return; const element = document.createElement('button'); element.type = 'button'; element.className = `bbox-rect ${index === scannerState.activePartIndex ? 'active' : ''}`; element.style.top = `${ymin / 10}%`; element.style.left = `${xmin / 10}%`; element.style.width = `${(xmax - xmin) / 10}%`; element.style.height = `${(ymax - ymin) / 10}%`; element.innerHTML = `<span class="bbox-tag">${escapeHtml(part.name_vi || part.name_en || `Đối tượng ${index + 1}`)}</span>`; element.addEventListener('click', () => { scannerState.activePartIndex = index; renderPartsStage(); }); layer.append(element); }); }
-function renderActivePartCard() { const part = scannerState.detectedParts[scannerState.activePartIndex]; if (!part) return; hideRecognitionState(); $('#active-part-category').textContent = part.category || 'Chưa phân loại'; $('#active-part-confidence').textContent = part.identification_status === 'product_identified' ? 'Đã nhận diện — cần xác nhận' : 'Cần xác nhận'; $('#active-part-name-vi').value = part.name_vi || ''; $('#active-part-name-en').textContent = part.name_en || '—'; $('#active-part-name-zh').textContent = part.name_zh || '—'; $('#active-part-oem').value = part.oem_code || ''; $('#active-part-brand').value = part.brand || ''; const badge = $('#compat-badge'); badge.className = 'compat-status-badge unverified'; $('#compat-status-title').textContent = 'CHƯA KIỂM CHỨNG TƯƠNG THÍCH'; $('#compat-status-desc').textContent = 'Không suy ra khả năng lắp vừa từ ảnh. Hãy đối chiếu tài liệu hoặc nhà cung cấp.'; }
-function renderOtherPartsList() { const list = $('#other-parts-list'); if (!list) return; const others = scannerState.detectedParts.map((part, index) => ({part, index})).filter(x => x.index !== scannerState.activePartIndex); list.innerHTML = others.length ? others.map(({part, index}) => `<button class="other-part-card" data-part-idx="${index}"><span>Đối tượng ${index + 1}</span><strong>${escapeHtml(part.name_vi || part.name_en || 'Chưa rõ')}</strong><small>${escapeHtml(part.category || 'Chưa phân loại')}</small></button>`).join('') : '<p class="field-hint">Không có vật thể khác được xác nhận.</p>'; list.querySelectorAll('[data-part-idx]').forEach(item => item.addEventListener('click', () => { scannerState.activePartIndex = Number(item.dataset.partIdx); renderPartsStage(); })); }
+function retiredRenderBoundingBoxes() { const layer = $('#bbox-layer'); if (!layer) return; layer.replaceChildren(); scannerState.detectedParts.forEach((part, index) => { const box = part.bounding_box; if (!Array.isArray(box) || box.length !== 4) return; const [ymin, xmin, ymax, xmax] = box; if (![ymin, xmin, ymax, xmax].every(Number.isFinite) || ymax <= ymin || xmax <= xmin) return; const element = document.createElement('button'); element.type = 'button'; element.className = `bbox-rect ${index === scannerState.activePartIndex ? 'active' : ''}`; element.style.top = `${ymin / 10}%`; element.style.left = `${xmin / 10}%`; element.style.width = `${(xmax - xmin) / 10}%`; element.style.height = `${(ymax - ymin) / 10}%`; element.innerHTML = `<span class="bbox-tag">${escapeHtml(part.name_vi || part.name_en || `Đối tượng ${index + 1}`)}</span>`; element.addEventListener('click', () => { scannerState.activePartIndex = index; renderPartsStage(); }); layer.append(element); }); }
+function retiredRenderActivePartCard() { const part = scannerState.detectedParts[scannerState.activePartIndex]; if (!part) return; hideRecognitionState(); $('#active-part-category').textContent = part.category || 'Chưa phân loại'; $('#active-part-confidence').textContent = part.identification_status === 'product_identified' ? 'Đã nhận diện — cần xác nhận' : 'Cần xác nhận'; $('#active-part-name-vi').value = part.name_vi || ''; $('#active-part-name-en').textContent = part.name_en || '—'; $('#active-part-name-zh').textContent = part.name_zh || '—'; $('#active-part-oem').value = part.oem_code || ''; $('#active-part-brand').value = part.brand || ''; const badge = $('#compat-badge'); badge.className = 'compat-status-badge unverified'; $('#compat-status-title').textContent = 'CHƯA KIỂM CHỨNG TƯƠNG THÍCH'; $('#compat-status-desc').textContent = 'Không suy ra khả năng lắp vừa từ ảnh. Hãy đối chiếu tài liệu hoặc nhà cung cấp.'; }
+function retiredRenderOtherPartsList() { const list = $('#other-parts-list'); if (!list) return; const others = scannerState.detectedParts.map((part, index) => ({part, index})).filter(x => x.index !== scannerState.activePartIndex); list.innerHTML = others.length ? others.map(({part, index}) => `<button class="other-part-card" data-part-idx="${index}"><span>Đối tượng ${index + 1}</span><strong>${escapeHtml(part.name_vi || part.name_en || 'Chưa rõ')}</strong><small>${escapeHtml(part.category || 'Chưa phân loại')}</small></button>`).join('') : '<p class="field-hint">Không có vật thể khác được xác nhận.</p>'; list.querySelectorAll('[data-part-idx]').forEach(item => item.addEventListener('click', () => { scannerState.activePartIndex = Number(item.dataset.partIdx); renderPartsStage(); })); }
 async function searchPartProducts() { const part = scannerState.detectedParts[scannerState.activePartIndex]; if (!part) return; part.name_vi = $('#active-part-name-vi').value.trim(); part.brand = $('#active-part-brand').value.trim() || null; part.oem_code = $('#active-part-oem').value.trim() || null; if (!part.name_vi) { showRecognitionState('needs_user_confirmation', 'Hãy xác nhận tên vật thể trước khi tra giá.'); return; } const query = [part.brand, part.name_zh || part.name_en || part.name_vi, part.oem_code].filter(Boolean).join(' '); $('#link-open-taobao').href = `https://s.taobao.com/search?q=${encodeURIComponent(query)}`; $('#link-open-1688').href = `https://air.1688.com/search/index.htm?keywords=${encodeURIComponent(query)}`; scannerState.searchResults = []; setScannerStep(4); renderSearchResults(); const notice = $('#demo-notice-pill'); if (notice) { notice.className = 'demo-notice-pill'; notice.innerHTML = '<span>SEARCH UNAVAILABLE</span><span>Chưa có nguồn dữ liệu được cấp quyền. Không hiển thị giá ước tính.</span>'; } }
 function renderFallbackSearchResults() { scannerState.searchResults = []; renderSearchResults(); }
-function loadPhotoFromFile(file) { if (!file) return; if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 8 * 1024 * 1024) { toast('Chỉ nhận JPEG, PNG hoặc WebP nhỏ hơn 8 MB.'); return; } visionAbortController?.abort(); scannerState.activeVisionRequestId = createVisionRequestId(); const reader = new FileReader(); reader.onerror = () => toast('Không đọc được ảnh đã chọn.'); reader.onload = () => { const image = new Image(); image.onload = () => { scannerState.capturedImage = image; scannerState.rotationAngle = 0; scannerState.blurScore = null; scannerState.detectedParts = []; setScannerStep(2); renderCropStage(); }; image.onerror = () => toast('Tệp ảnh không hợp lệ.'); image.src = String(reader.result); }; reader.readAsDataURL(file); }
-function capturePhotoFromCamera() { const video = $('#scanner-video'); if (!video || !video.videoWidth) { toast('Camera chưa sẵn sàng.'); return; } visionAbortController?.abort(); scannerState.activeVisionRequestId = createVisionRequestId(); const canvas = document.createElement('canvas'); canvas.width = video.videoWidth; canvas.height = video.videoHeight; canvas.getContext('2d').drawImage(video, 0, 0); const image = new Image(); image.onload = () => { scannerState.capturedImage = image; scannerState.rotationAngle = 0; scannerState.detectedParts = []; stopCameraStream(); setScannerStep(2); renderCropStage(); }; image.src = canvas.toDataURL('image/jpeg', .9); }
+function retiredLoadPhotoFromFile(file) { if (!file) return; if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 8 * 1024 * 1024) { toast('Chỉ nhận JPEG, PNG hoặc WebP nhỏ hơn 8 MB.'); return; } visionAbortController?.abort(); scannerState.activeVisionRequestId = createVisionRequestId(); const reader = new FileReader(); reader.onerror = () => toast('Không đọc được ảnh đã chọn.'); reader.onload = () => { const image = new Image(); image.onload = () => { scannerState.capturedImage = image; scannerState.rotationAngle = 0; scannerState.blurScore = null; scannerState.detectedParts = []; setScannerStep(2); renderCropStage(); }; image.onerror = () => toast('Tệp ảnh không hợp lệ.'); image.src = String(reader.result); }; reader.readAsDataURL(file); }
+function retiredCapturePhotoFromCamera() { const video = $('#scanner-video'); if (!video || !video.videoWidth) { toast('Camera chưa sẵn sàng.'); return; } visionAbortController?.abort(); scannerState.activeVisionRequestId = createVisionRequestId(); const canvas = document.createElement('canvas'); canvas.width = video.videoWidth; canvas.height = video.videoHeight; canvas.getContext('2d').drawImage(video, 0, 0); const image = new Image(); image.onload = () => { scannerState.capturedImage = image; scannerState.rotationAngle = 0; scannerState.detectedParts = []; stopCameraStream(); setScannerStep(2); renderCropStage(); }; image.src = canvas.toDataURL('image/jpeg', .9); }
 async function verifyManualProductUrl() { const input = $('#manual-product-url'); const url = input?.value.trim(); if (!url) { toast('Vui lòng dán liên kết Taobao hoặc 1688.'); return; } try { const response = await fetch('/api/scanner/verify-url', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({url})}); const data = await response.json(); if (!response.ok || !data.ok) { toast(data.error || 'URL bị từ chối.'); return; } input.value = ''; toast('URL hợp lệ. Mở trang nguồn để tự xác minh sản phẩm và giá; ứng dụng không ước tính giá.'); } catch { toast('Không thể xác minh liên kết lúc này.'); } }
+
+// Camera recognition runtime. These declarations replace the retired scanner path above.
+function createScanId() { if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID(); const token = `${Date.now().toString(16)}${Math.random().toString(16).slice(2)}`.padEnd(32, '0').slice(0, 32); return `${token.slice(0, 8)}-${token.slice(8, 12)}-4${token.slice(13, 16)}-8${token.slice(17, 20)}-${token.slice(20)}`; }
+function resetRecognitionForNewScan() {
+  visionAbortController?.abort();
+  scannerState.scanId = createScanId();
+  scannerState.activeVisionRequestId = null;
+  scannerState.detectedParts = [];
+  scannerState.activePartIndex = 0;
+  scannerState.searchResults = [];
+  scannerState.selectedResult = null;
+  scannerState.recognitionStatus = null;
+  scannerState.imageIntegrity = null;
+  $('#bbox-layer')?.replaceChildren();
+  $('#other-parts-list')?.replaceChildren();
+  $('#recognition-state')?.setAttribute('hidden', '');
+  $('#part-active-card')?.setAttribute('hidden', '');
+  const compatibility = $('#active-compatibility-box');
+  if (compatibility) compatibility.hidden = true;
+}
+function imageBytesFromDataUrl(dataUrl) {
+  const encoded = dataUrl.split(',', 2)[1] || '';
+  return Uint8Array.from(atob(encoded), char => char.charCodeAt(0));
+}
+async function makeImageIntegrity(image, scanId, requestId, width, height) {
+  const hash = await crypto.subtle.digest('SHA-256', imageBytesFromDataUrl(image));
+  const digest = Array.from(new Uint8Array(hash), byte => byte.toString(16).padStart(2, '0')).join('');
+  return { scan_id: scanId, request_id: requestId, image_sha256: digest, image_width: width, image_height: height, image_mime_type: 'image/jpeg', capture_timestamp: new Date().toISOString() };
+}
+function optimizedVisionImage(canvas) {
+  const scale = Math.min(1, 1600 / Math.max(canvas.width, canvas.height));
+  const output = document.createElement('canvas');
+  output.width = Math.max(1, Math.round(canvas.width * scale));
+  output.height = Math.max(1, Math.round(canvas.height * scale));
+  output.getContext('2d').drawImage(canvas, 0, 0, output.width, output.height);
+  const dataUrl = output.toDataURL('image/jpeg', 0.82);
+  if (dataUrl.length > 4_000_000) throw new Error('image_invalid');
+  return { dataUrl, width: output.width, height: output.height };
+}
+async function analyzePartsWithAI() {
+  const canvas = $('#crop-canvas');
+  if (!canvas || !scannerState.capturedImage) { setScannerStep(3); showRecognitionState('image_invalid'); return; }
+  let optimized;
+  try { optimized = optimizedVisionImage(canvas); } catch { setScannerStep(3); showRecognitionState('image_invalid'); return; }
+  visionAbortController?.abort();
+  visionAbortController = new AbortController();
+  const scanId = scannerState.scanId || createScanId();
+  const requestId = createVisionRequestId();
+  let integrity;
+  try { integrity = await makeImageIntegrity(optimized.dataUrl, scanId, requestId, optimized.width, optimized.height); } catch { setScannerStep(3); showRecognitionState('image_invalid', 'Không thể kiểm tra toàn vẹn ảnh.'); return; }
+  scannerState.scanId = scanId;
+  scannerState.activeVisionRequestId = requestId;
+  scannerState.imageIntegrity = integrity;
+  scannerState.detectedParts = [];
+  toast('Đang phân tích đúng ảnh đã xác nhận…');
+  try {
+    const response = await fetch('/api/ai/recognize-part', { method: 'POST', headers: {'Content-Type': 'application/json'}, signal: visionAbortController.signal, body: JSON.stringify({ request_id: requestId, image: optimized.dataUrl, image_integrity: integrity, vehicle }) });
+    const data = await response.json().catch(() => ({}));
+    if (scannerState.activeVisionRequestId !== requestId || scannerState.scanId !== scanId || data.request_id !== requestId) return;
+    if (!response.ok || !data.ok) { setScannerStep(3); showRecognitionState(data.status || 'recognition_failed', data.error); return; }
+    if (data.scan_id !== scanId || data.image_sha256 !== integrity.image_sha256) { setScannerStep(3); showRecognitionState('image_integrity_mismatch'); return; }
+    const objects = Array.isArray(data.parts) ? data.parts : [];
+    if (!objects.length || data.status === 'object_unknown') { setScannerStep(3); showRecognitionState('object_unknown'); return; }
+    scannerState.detectedParts = objects.map(object => ({ ...object, bounding_box: object.box_2d || null, identification_status: object.requires_verification ? 'needs_user_confirmation' : 'category_identified' }));
+    scannerState.activePartIndex = 0;
+    scannerState.recognitionStatus = data.status;
+    setScannerStep(3);
+    renderPartsStage();
+    if (data.status === 'multiple_objects_detected' || data.status === 'needs_user_confirmation') showRecognitionState(data.status);
+  } catch (error) {
+    if (error?.name !== 'AbortError' && scannerState.activeVisionRequestId === requestId) { setScannerStep(3); showRecognitionState('image_upload_failed'); }
+  }
+}
+function renderBoundingBoxes() {
+  const layer = $('#bbox-layer');
+  const image = $('#detected-photo-preview');
+  const wrapper = $('#preview-img-wrapper');
+  if (!layer || !image || !wrapper) return;
+  layer.replaceChildren();
+  if (!scannerState.detectedParts.length || !image.naturalWidth || !image.naturalHeight) return;
+  const wrapperRect = wrapper.getBoundingClientRect();
+  const imageRatio = image.naturalWidth / image.naturalHeight;
+  const wrapperRatio = wrapperRect.width / wrapperRect.height;
+  const renderedWidth = imageRatio > wrapperRatio ? wrapperRect.width : wrapperRect.height * imageRatio;
+  const renderedHeight = imageRatio > wrapperRatio ? wrapperRect.width / imageRatio : wrapperRect.height;
+  const offsetX = (wrapperRect.width - renderedWidth) / 2;
+  const offsetY = (wrapperRect.height - renderedHeight) / 2;
+  scannerState.detectedParts.forEach((part, index) => {
+    const box = part.bounding_box;
+    if (!Array.isArray(box) || box.length !== 4) return;
+    const [ymin, xmin, ymax, xmax] = box;
+    if (![ymin, xmin, ymax, xmax].every(Number.isFinite) || ymin < 0 || xmin < 0 || ymax > 1000 || xmax > 1000 || ymax <= ymin || xmax <= xmin) return;
+    const element = document.createElement('button');
+    element.type = 'button';
+    element.className = 'bbox-rect' + (index === scannerState.activePartIndex ? ' active' : '');
+    element.style.top = (offsetY + renderedHeight * ymin / 1000) + 'px';
+    element.style.left = (offsetX + renderedWidth * xmin / 1000) + 'px';
+    element.style.width = (renderedWidth * (xmax - xmin) / 1000) + 'px';
+    element.style.height = (renderedHeight * (ymax - ymin) / 1000) + 'px';
+    const tag = document.createElement('span');
+    tag.className = 'bbox-tag';
+    tag.textContent = part.name_vi || part.name_en || ('Đối tượng ' + (index + 1));
+    element.append(tag);
+    element.addEventListener('click', () => { scannerState.activePartIndex = index; renderPartsStage(); });
+    layer.append(element);
+  });
+}
+function renderActivePartCard() {
+  const part = scannerState.detectedParts[scannerState.activePartIndex];
+  if (!part) return;
+  hideRecognitionState();
+  $('#active-part-category').textContent = part.category || 'unknown';
+  $('#active-part-confidence').textContent = part.requires_verification ? 'Cần xác nhận' : 'Nhận diện theo ảnh';
+  $('#active-part-name-vi').value = part.name_vi || '';
+  $('#active-part-name-en').textContent = part.name_en || '—';
+  $('#active-part-name-zh').textContent = part.name_zh || '—';
+  $('#active-part-oem').value = part.category === 'automotive_part' ? (part.oem_code || '') : '';
+  $('#active-part-brand').value = part.brand || '';
+  const compatibility = $('#active-compatibility-box');
+  if (compatibility) compatibility.hidden = part.category !== 'automotive_part';
+  if (part.category === 'automotive_part') {
+    const badge = $('#compat-badge');
+    if (badge) badge.className = 'compat-status-badge unverified';
+    $('#compat-status-title').textContent = 'CẦN ĐỐI CHIẾU TƯƠNG THÍCH';
+    $('#compat-status-desc').textContent = 'Ảnh không xác minh được khả năng lắp vừa. Hãy đối chiếu catalog hoặc tài liệu kỹ thuật.';
+  }
+}
+function loadPhotoFromFile(file) {
+  if (!file || !['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 8 * 1024 * 1024) { toast('Chỉ nhận JPEG, PNG hoặc WebP nhỏ hơn 8 MB.'); return; }
+  resetRecognitionForNewScan();
+  const reader = new FileReader();
+  reader.onerror = () => toast('Không đọc được ảnh đã chọn.');
+  reader.onload = () => { const image = new Image(); image.onload = () => { scannerState.capturedImage = image; scannerState.rotationAngle = 0; scannerState.blurScore = null; setScannerStep(2); renderCropStage(); }; image.onerror = () => toast('Tệp ảnh không hợp lệ.'); image.src = String(reader.result); };
+  reader.readAsDataURL(file);
+}
+function capturePhotoFromCamera() {
+  const video = $('#scanner-video');
+  if (!video || !video.videoWidth) { toast('Camera chưa sẵn sàng.'); return; }
+  resetRecognitionForNewScan();
+  const canvas = document.createElement('canvas');
+  canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  const image = new Image();
+  image.onload = () => { scannerState.capturedImage = image; scannerState.rotationAngle = 0; stopCameraStream(); setScannerStep(2); renderCropStage(); };
+  image.src = canvas.toDataURL('image/jpeg', 0.9);
+}
+function loadSamplePhoto() {
+  toast('Ảnh mẫu đã bị tắt. Hãy chụp hoặc chọn ảnh thực để phân tích.');
+}
+function renderPartsStage() {
+  const previewImg = $('#detected-photo-preview');
+  const canvas = $('#crop-canvas');
+  if (previewImg && canvas) {
+    const draw = () => { renderBoundingBoxes(); renderActivePartCard(); renderOtherPartsList(); };
+    previewImg.onload = draw;
+    previewImg.src = canvas.toDataURL('image/jpeg', 0.85);
+    if (previewImg.complete) draw();
+    return;
+  }
+  renderBoundingBoxes();
+  renderActivePartCard();
+  renderOtherPartsList();
+}

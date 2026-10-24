@@ -9,7 +9,10 @@
   - `OllamaVisionProvider` as a configuration-only future option. It never
     assumes that a Vercel Function can reach a personal computer's localhost.
 - Gemini receives the full optimized image, not a hint or a sample result. Its
-  output is constrained by JSON Schema and checked again with Zod.
+  output is constrained by JSON Schema and checked again with Zod. Recognition
+  runs in a general-object Stage A followed by category enrichment Stage B.
+- Each request carries a scan id, request id and client integrity envelope. The
+  Node route recomputes the image hash and dimensions before calling Gemini.
 - The provider removes brand, model, OEM and part number if they do not appear
   in `visible_text` or `evidence`. Vehicle context is explicitly not proof of
   fitment. A box is rendered only when Gemini returns a valid normalized box.
@@ -33,8 +36,9 @@ added only in Vercel Project Settings, then the deployment must be redeployed.
 
 ## Verification
 
-- `npm test` passes four tests: image validation, evidence filtering,
-  free-tier lock, and deterministic 30% markup calculation.
+- `npm test` passes eight tests: image validation, evidence filtering, integrity
+  mismatch, request-id binding, staged recognition, box validation, free-tier
+  lock, and deterministic 30% markup calculation.
 - `npm audit --omit=dev --json` reports zero vulnerabilities after updating
   Zod to 4.6.7.
 - Node syntax checks pass for the API route, provider module and scanner UI.
