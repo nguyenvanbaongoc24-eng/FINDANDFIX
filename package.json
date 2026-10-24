@@ -1,0 +1,13 @@
+{
+  "name": "find-and-fix",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "test:vision": "node --test tests/vision-providers.test.mjs"
+  },
+  "dependencies": {
+    "@google/genai": "^1.0.0",
+    "zod": "^4.6.7"
+  }
+}
